@@ -1,7 +1,7 @@
 CC = gcc 
 FLAGS = -c -Wall -ansi -pedantic -std=c99
 LIBRARY = -lgmp
-P=SeguridadPerfecta/
+P=seguridadPerfecta/
 O=obj/
 A=afin/
 U=utiles/
