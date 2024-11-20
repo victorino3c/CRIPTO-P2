@@ -13,7 +13,7 @@ run_seguridad_perfecta_P: $(P)seguridad_perfecta
 	$(P)seguridad_perfecta -P -i $(T)hamlet.txt
 
 run_seguridad_perfecta_I: $(P)seguridad_perfecta
-	$(P)seguridad_perfecta -I -i $(T)hola.txt
+	$(P)seguridad_perfecta -I -i $(T)hamlet.txt
 
 # COMANDOS EJECUCION AFIN #
 run_afin_D: $(A)afin

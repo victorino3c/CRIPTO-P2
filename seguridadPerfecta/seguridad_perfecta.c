@@ -209,10 +209,10 @@ int main(int argc, char *argv[]) {
 
     char *temp = (char *) malloc(2 * sizeof(char));
     temp[1] = '\0';
-    //ITERO CADA CARACTER DEL TEXTO, CIFRANDOLO CON UNA CLAVE DISTINTA Y GUARDANDOLO EN EL TEXTO CIFRADO
     
     srand(time(NULL));
 
+    /* Encrypt each character with a different key, depending on the mode it will equiprobable keys or not*/
     for (int i = 0; i < strlen(texto); i++) {
 
         temp[0] = texto[i];
@@ -287,12 +287,30 @@ void generateEquiprobableKey(Keys *keys, int *a, int *b) {
     *b = random_num(0, LANGUAGE_SIZE-1);
 }
 
-// TODO: Generate non equiprobable key
 void generateNonEquiprobableKey(Keys *keys, int *a, int *b) {
 
-    *a = 3;
+    /*Asocio a cada key un peso que sea el peso anterior *2 */
+    int *pesos = (int *) malloc(keys->size * sizeof(int));
 
-    *b = 5;
+    pesos[0] = 1;
+    int total = 1;
+
+    for (int i = 1; i < keys->size; i++) {
+        pesos[i] = pesos[i-1] * 2;
+        total += pesos[i];
+    }
+    
+    /* Ahora uso estos pesos para elegir una clave aleatoriamente*/
+    int random = random_num(0, total);
+
+    int i = 0;
+    while (random > pesos[i]) {
+        random -= pesos[i];
+        i++;
+    }
+
+    *a = keys->keys[i];
+    *b = i;
 
 }
 
