@@ -10,7 +10,7 @@ T=textos/
 all: $(P)seguridad_perfecta
 
 run_seguridad_perfecta_P: $(P)seguridad_perfecta
-	$(P)seguridad_perfecta -P -i $(T)hola.txt
+	$(P)seguridad_perfecta -P -i $(T)hamlet.txt
 
 run_seguridad_perfecta_I: $(P)seguridad_perfecta
 	$(P)seguridad_perfecta -I -i $(T)hola.txt
@@ -31,6 +31,7 @@ $(P)seguridad_perfecta: $(O)seguridad_perfecta.o $(O)afin.o $(O)utils.o
 
 $(O)seguridad_perfecta.o: $(P)seguridad_perfecta.c $(A)afin.h $(U)utils.h
 	$(CC) -o $@ $(FLAGS) $<
+
 
 $(O)afin.o: $(A)afin.c $(A)afin.h $(U)utils.h
 	$(CC) -o $@ $(FLAGS) $<

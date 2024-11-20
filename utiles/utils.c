@@ -352,6 +352,7 @@ int find_gcd_of_list(int* numbers, int size) {
 
 int random_num(int inf, int sup)
 {
+
     int res = inf;
 
     /*Error control*/

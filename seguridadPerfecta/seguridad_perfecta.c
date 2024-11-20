@@ -14,9 +14,16 @@
 
 #define LANGUAGE_SIZE 26
 #define OUTPUT_BUFFER 4096 * 4
+#define DEFAULT_KEYS_SIZE 32
 
 typedef struct {
-    int *count;
+    int *keys;
+    int size;
+} Keys;
+
+typedef struct {
+    int *absoluta;
+    float *relativa;
     int total;
 } Probabilty;
 
@@ -34,7 +41,7 @@ void printExeInfo();
 /** 
  * @brief Function to create a probabilty struct given the lenguage size and the intial total of characters
  * 
- * @param count array of the count of each character
+ * @param size size of the language
  * @param total total of characters
  * 
  * @return Probability pointer to the probabilty struct
@@ -59,7 +66,7 @@ void freeProbabilty(Probabilty *prob);
  * 
  * @return void
  **/
-void generateEquiprobableKey(int *a, int *b, int m);
+void generateEquiprobableKey(Keys *keys, int *a, int *b);
 
 /** 
  * @brief Generates a non equiprobable key for the affine method
@@ -70,7 +77,7 @@ void generateEquiprobableKey(int *a, int *b, int m);
  * 
  * @return void
  **/
-void generateNonEquiprobableKey(int *a, int *b, int m);
+void generateNonEquiprobableKey(Keys *keys, int *a, int *b);
 
 /**
  * @brief Calculates the probability of each character in the language in the encrypted text
@@ -105,7 +112,30 @@ ConditionalProbabilty *createConditionalProbabilty(int lang_size);
  * @return Probabilty pointer to the conditional probability
  * 
  */
-ConditionalProbabilty* conditionalProbability(Probabilty *prob_normal, Probabilty *prob_encrypted, float key_prob);
+ConditionalProbabilty* conditionalProbability(char *texto, char *texto_cifrado);
+
+
+/**
+ * @brief Generates the keys for the affine method
+ * 
+ * @param m size of the language
+ * 
+ * @return Keys pointer to the keys struct
+ */
+Keys *generateKeys(int m);
+
+/**
+ * @brief Generates a key for the affine method
+ * 
+ * @param keys pointer to the keys struct
+ * @param a pointer to the key a
+ * @param b pointer to the key b
+ * @param mode mode of the key generation
+ * 
+ * @return void
+ */
+void generateKey(Keys *keys, int *a, int *b, char* mode);
+
 
 int main(int argc, char *argv[]) {
 
@@ -156,13 +186,15 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    /*Generate possibles keys for the afin method*/
+    Keys *keys = generateKeys(LANGUAGE_SIZE);
+
     // Obtain text to encrypt
     texto = handleInputText(filein);
     if (texto == NULL) {
         return 1;
     }
 
-    // TODO: BUG DE QUE NO LIMPIA ESPACIO DESPUES DE TEXTO TRAS DESPLAZARLO
     filtrarTexto(texto);
 
     texto_cifrado = (char *) malloc(strlen(texto) * sizeof(char));
@@ -178,15 +210,14 @@ int main(int argc, char *argv[]) {
     char *temp = (char *) malloc(2 * sizeof(char));
     temp[1] = '\0';
     //ITERO CADA CARACTER DEL TEXTO, CIFRANDOLO CON UNA CLAVE DISTINTA Y GUARDANDOLO EN EL TEXTO CIFRADO
+    
+    srand(time(NULL));
+
     for (int i = 0; i < strlen(texto); i++) {
 
         temp[0] = texto[i];
 
-        if(strcmp(modo, "-P") == 0) {
-            generateEquiprobableKey(&a_i, &b_i, LANGUAGE_SIZE);
-        } else {
-            generateNonEquiprobableKey(&a_i, &b_i, LANGUAGE_SIZE);
-        }
+        generateKey(keys, &a_i, &b_i, modo);
 
         mpz_set_si(a, (long)a_i);
         mpz_set_si(b, (long)b_i);
@@ -204,15 +235,15 @@ int main(int argc, char *argv[]) {
     Probabilty *prob_encrypted = probabilityText(texto_cifrado);
 
     for (int i = 0; i < LANGUAGE_SIZE; i++) {
-        if (prob_original->count[i] == 0) {
+        if (prob_original->relativa[i] == 0) {
             snprintf(output + strlen(output), OUTPUT_BUFFER-strlen(output), "Pp(%c)= %.2lf\n", i + 'a', 0.00);
             continue;
         }
-        snprintf(output + strlen(output), OUTPUT_BUFFER-strlen(output), "Pp(%c)= %.2lf (%d / %d)\n", i + 'a', (float)prob_original->count[i] / prob_original->total, prob_original->count[i], prob_original->total);
-        //snprintf(output + strlen(output), OUTPUT_BUFFER-strlen(output), "Pp(%c)= %.2lf (%d / %d)\n", i + 'a', (float)prob_encrypted->count[i] / prob_encrypted->total, prob_encrypted->count[i], prob_encrypted->total);
+        snprintf(output + strlen(output), OUTPUT_BUFFER-strlen(output), "Pp(%c)= %.2lf (%d / %d)\n", i + 'a', prob_original->relativa[i], prob_original->absoluta[i], prob_original->total);
+        //snprintf(output + strlen(output), OUTPUT_BUFFER-strlen(output), "Pp(%c)= %.2lf (%d / %d)\n", i + 'a', prob_encrypted->relativa[i], prob_encrypted->absoluta[i], prob_encrypted->total);
     }
 
-    ConditionalProbabilty *cond_prob = conditionalProbability(prob_original, prob_encrypted, (float)1/26);
+    ConditionalProbabilty *cond_prob = conditionalProbability(texto, texto_cifrado);
 
     for (int i = 0; i < LANGUAGE_SIZE; i++) {
         for (int j = 0; j < LANGUAGE_SIZE; j++) {
@@ -228,6 +259,8 @@ int main(int argc, char *argv[]) {
     free(texto);
     free(texto_cifrado);
     free(output);
+    free(keys->keys);
+    free(keys);
 
     freeProbabilty(prob_original);
     freeProbabilty(prob_encrypted);
@@ -248,26 +281,14 @@ void printExeInfo() {
     printf("-o fileout: archivo de salida\n");
 }
 
-void generateEquiprobableKey(int *a, int *b, int m) {
+void generateEquiprobableKey(Keys *keys, int *a, int *b) {
 
-    srand(time(NULL));
-
-    int *z = (int *) malloc(sizeof(int));
-    int *tam;
-
-    do {
-        *a = random_num(1, m);
-        tam = euclides2(*a, m, 0, z);
-    } while (tam[*z - 1] != 1);
-
-    *b = random_num(1, m);
-
-    free(z);
-    free(tam);
+    *a = keys->keys[random_num(0, keys->size-1)];
+    *b = random_num(0, LANGUAGE_SIZE-1);
 }
 
-// PREGUNTAR COMO GENERAR UNA CLAVE NO EQUIVALENTE
-void generateNonEquiprobableKey(int *a, int *b, int m) {
+// TODO: Generate non equiprobable key
+void generateNonEquiprobableKey(Keys *keys, int *a, int *b) {
 
     *a = 3;
 
@@ -281,22 +302,28 @@ Probabilty *probabilityText(char *texto) {
     int i = 0;
 
     for (i = 0; i < strlen(texto); i++) {
-        prob->count[texto[i] - 'a']++;
+        prob->absoluta[texto[i] - 'a']++;
         prob->total++;
+    }
+
+    for (i = 0; i < LANGUAGE_SIZE; i++) {
+        prob->relativa[i] = (float)prob->absoluta[i]/prob->total;
     }
 
     return prob;
 }
 
 void freeProbabilty(Probabilty *prob) {
-    free(prob->count);
+    free(prob->absoluta);
+    free(prob->relativa);
     free(prob);
 }
 
 Probabilty *createProbabilty(int size, int total) {
     Probabilty *prob = (Probabilty *) malloc(sizeof(Probabilty));
 
-    prob->count = (int *) calloc(sizeof(int), size);
+    prob->absoluta = (int *) calloc(sizeof(int), size);
+    prob->relativa = (float *) calloc(sizeof(float), size);
     prob->total = total;
 
     return prob;
@@ -316,33 +343,67 @@ ConditionalProbabilty *createConditionalProbabilty(int lang_size) {
     cond_prob->prob = (float **) malloc(lang_size * sizeof(float *));
 
     for (int i = 0; i < lang_size; i++) {
-        cond_prob->prob[i] = (float *) malloc(lang_size * sizeof(float));
+        cond_prob->prob[i] = (float *) calloc(lang_size, sizeof(float));
     }
+
+    /*Initialize everything to 0*/
 
     return cond_prob;
 }
 
-ConditionalProbabilty *conditionalProbability(Probabilty *prob_normal, Probabilty *prob_encrypted, float key_prob) {
+ConditionalProbabilty *conditionalProbability(char *texto, char *texto_cifrado) {
 
     ConditionalProbabilty *cond_prob = createConditionalProbabilty(LANGUAGE_SIZE);
 
-    float pn = 0;
-    float pe = 0;
+    for (int i = 0; i < strlen(texto); i++) {
+        cond_prob->prob[texto[i] - 'a'][texto_cifrado[i] - 'a']++;
+    }
+
+    Probabilty * prob_cifrado = probabilityText(texto_cifrado);
 
     for (int i = 0; i < LANGUAGE_SIZE; i++) {
         for (int j = 0; j < LANGUAGE_SIZE; j++) {
-            if (prob_encrypted->count[j] == 0) {
-                cond_prob->prob[i][j] = 0;
-                continue;
-            }
 
-            pn = (float)prob_normal->count[i]/prob_normal->total;
-            pe = (float)prob_encrypted->count[j]/prob_encrypted->total;
 
-            cond_prob->prob[i][j] = (pn * key_prob) / pe;
-
+            cond_prob->prob[i][j] = cond_prob->prob[i][j] / prob_cifrado->absoluta[j];
         }
     }
 
+    free(prob_cifrado);
+
     return cond_prob;
+}
+
+Keys *generateKeys(int m) {
+    Keys *keys = (Keys *)malloc(sizeof(Keys));
+
+    keys->keys = (int *)malloc(DEFAULT_KEYS_SIZE * sizeof(int));
+    int j = 0; 
+
+    int *z = (int *) malloc(sizeof(int)), *tam;
+
+    for (int i = 0; i < m; i++) {
+        tam = euclides2(i, m, 0, z);
+
+        if (tam[*z - 1] == 1) {
+            keys->keys[j] = i;
+            j++;
+        }
+    }
+
+    keys->keys = (int *) realloc(keys->keys, j * sizeof(int));
+    keys->size = j;
+
+    free(z);
+
+    return keys;
+}
+
+void generateKey(Keys *keys, int*a, int*b, char *mode) {
+    
+    if (strcmp(mode, "-P") == 0) {
+        generateEquiprobableKey(keys, a, b);
+    } else {
+        generateNonEquiprobableKey(keys, a, b);
+    }
 }
