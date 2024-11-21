@@ -1,6 +1,8 @@
+# Compiled source
 seguridadPerfecta/seguridad_perfecta
 des/des
 aes/aes
 
+# Object files
 obj/*
 
