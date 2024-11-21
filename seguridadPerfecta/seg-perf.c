@@ -105,9 +105,8 @@ ConditionalProbabilty *createConditionalProbabilty(int lang_size);
 /**
  * @brief Calculates the conditional probability 
  * 
- * @param prob_normal probability of the normal text
- * @param prob_encrypted probability of the encrypted text
- * @param key_prob key used to encrypt the text
+ * @param texto pointer to the original text
+ * @param texto_cifrado pointer to the encrypted text
  * 
  * @return Probabilty pointer to the conditional probability
  * 
@@ -189,7 +188,7 @@ int main(int argc, char *argv[]) {
     /*Generate possibles keys for the afin method*/
     Keys *keys = generateKeys(LANGUAGE_SIZE);
 
-    // Obtain text to encrypt
+    /* Obtain text to encrypt*/
     texto = handleInputText(filein);
     if (texto == NULL) {
         return 1;
@@ -210,6 +209,7 @@ int main(int argc, char *argv[]) {
     char *temp = (char *) malloc(2 * sizeof(char));
     temp[1] = '\0';
     
+    /*Init the rand seed so the equiprobable keys are obtained correctly */
     srand(time(NULL));
 
     /* Encrypt each character with a different key, depending on the mode it will equiprobable keys or not*/
@@ -230,21 +230,22 @@ int main(int argc, char *argv[]) {
 
     texto_cifrado[strlen(texto)] = '\0';
 
-    //LOGICA DE CIFRADO PERFECTO
+    /*Get the probability of each character in the text*/
     Probabilty *prob_original = probabilityText(texto);
-    Probabilty *prob_encrypted = probabilityText(texto_cifrado);
 
+    /*Print the probabilities in the given output*/
     for (int i = 0; i < LANGUAGE_SIZE; i++) {
         if (prob_original->relativa[i] == 0) {
             snprintf(output + strlen(output), OUTPUT_BUFFER-strlen(output), "Pp(%c)= %.2lf\n", i + 'a', 0.00);
             continue;
         }
         snprintf(output + strlen(output), OUTPUT_BUFFER-strlen(output), "Pp(%c)= %.2lf (%d / %d)\n", i + 'a', prob_original->relativa[i], prob_original->absoluta[i], prob_original->total);
-        //snprintf(output + strlen(output), OUTPUT_BUFFER-strlen(output), "Pp(%c)= %.2lf (%d / %d)\n", i + 'a', prob_encrypted->relativa[i], prob_encrypted->absoluta[i], prob_encrypted->total);
     }
 
+    /*Get the conditional probability of each character in the text given its pair in the cipher text*/
     ConditionalProbabilty *cond_prob = conditionalProbability(texto, texto_cifrado);
 
+    /*Print the conditional probabilities in the given output*/
     for (int i = 0; i < LANGUAGE_SIZE; i++) {
         for (int j = 0; j < LANGUAGE_SIZE; j++) {
             snprintf(output + strlen(output), OUTPUT_BUFFER-strlen(output), "Pp(%c|%c)=%.2lf  ", i + 'a', j + 'a', cond_prob->prob[i][j]);
@@ -252,10 +253,12 @@ int main(int argc, char *argv[]) {
         snprintf(output + strlen(output), OUTPUT_BUFFER-strlen(output), "\n");
     }
 
+    /*Output the result of the program*/
     if (handleOutputText(fileout, output) == -1) {
         return 1;
     }
 
+    /*Free the memory*/
     free(texto);
     free(texto_cifrado);
     free(output);
@@ -263,7 +266,6 @@ int main(int argc, char *argv[]) {
     free(keys);
 
     freeProbabilty(prob_original);
-    freeProbabilty(prob_encrypted);
     freeConditionalProbabilty(cond_prob);
 
     mpz_clear(m);
@@ -363,7 +365,7 @@ ConditionalProbabilty *createConditionalProbabilty(int lang_size) {
     for (int i = 0; i < lang_size; i++) {
         cond_prob->prob[i] = (float *) calloc(lang_size, sizeof(float));
     }
-    
+
     return cond_prob;
 }
 

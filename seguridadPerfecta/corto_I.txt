@@ -1,0 +1,52 @@
+Pp(a)= 0.07 (82 / 1151)
+Pp(b)= 0.01 (16 / 1151)
+Pp(c)= 0.03 (37 / 1151)
+Pp(d)= 0.03 (35 / 1151)
+Pp(e)= 0.13 (150 / 1151)
+Pp(f)= 0.03 (39 / 1151)
+Pp(g)= 0.03 (34 / 1151)
+Pp(h)= 0.06 (68 / 1151)
+Pp(i)= 0.06 (73 / 1151)
+Pp(j)= 0.00
+Pp(k)= 0.00 (3 / 1151)
+Pp(l)= 0.05 (58 / 1151)
+Pp(m)= 0.02 (25 / 1151)
+Pp(n)= 0.07 (81 / 1151)
+Pp(o)= 0.07 (75 / 1151)
+Pp(p)= 0.01 (16 / 1151)
+Pp(q)= 0.00 (2 / 1151)
+Pp(r)= 0.07 (81 / 1151)
+Pp(s)= 0.07 (85 / 1151)
+Pp(t)= 0.09 (104 / 1151)
+Pp(u)= 0.03 (36 / 1151)
+Pp(v)= 0.01 (12 / 1151)
+Pp(w)= 0.01 (15 / 1151)
+Pp(x)= 0.00 (1 / 1151)
+Pp(y)= 0.02 (23 / 1151)
+Pp(z)= 0.00
+Pp(a|a)=0.00  Pp(a|b)=0.00  Pp(a|c)=0.00  Pp(a|d)=0.00  Pp(a|e)=0.00  Pp(a|f)=0.00  Pp(a|g)=0.02  Pp(a|h)=0.10  Pp(a|i)=0.10  Pp(a|j)=0.32  Pp(a|k)=0.59  Pp(a|l)=0.57  Pp(a|m)=0.00  Pp(a|n)=0.00  Pp(a|o)=0.00  Pp(a|p)=0.00  Pp(a|q)=0.00  Pp(a|r)=0.00  Pp(a|s)=0.00  Pp(a|t)=0.00  Pp(a|u)=0.00  Pp(a|v)=0.00  Pp(a|w)=0.00  Pp(a|x)=0.00  Pp(a|y)=0.00  Pp(a|z)=0.00  
+Pp(b|a)=0.00  Pp(b|b)=0.11  Pp(b|c)=0.00  Pp(b|d)=0.00  Pp(b|e)=0.07  Pp(b|f)=0.00  Pp(b|g)=0.00  Pp(b|h)=0.01  Pp(b|i)=0.00  Pp(b|j)=0.00  Pp(b|k)=0.26  Pp(b|l)=0.00  Pp(b|m)=0.00  Pp(b|n)=0.00  Pp(b|o)=0.00  Pp(b|p)=0.00  Pp(b|q)=0.00  Pp(b|r)=0.00  Pp(b|s)=0.00  Pp(b|t)=0.00  Pp(b|u)=0.00  Pp(b|v)=0.00  Pp(b|w)=0.00  Pp(b|x)=0.00  Pp(b|y)=0.00  Pp(b|z)=0.00  
+Pp(c|a)=0.00  Pp(c|b)=0.00  Pp(c|c)=0.00  Pp(c|d)=0.00  Pp(c|e)=0.18  Pp(c|f)=0.00  Pp(c|g)=0.00  Pp(c|h)=0.00  Pp(c|i)=0.00  Pp(c|j)=0.64  Pp(c|k)=0.00  Pp(c|l)=0.00  Pp(c|m)=0.00  Pp(c|n)=0.00  Pp(c|o)=0.00  Pp(c|p)=0.03  Pp(c|q)=0.00  Pp(c|r)=0.00  Pp(c|s)=0.00  Pp(c|t)=0.00  Pp(c|u)=0.04  Pp(c|v)=0.00  Pp(c|w)=0.00  Pp(c|x)=0.00  Pp(c|y)=0.00  Pp(c|z)=0.19  
+Pp(d|a)=0.00  Pp(d|b)=0.39  Pp(d|c)=0.00  Pp(d|d)=0.02  Pp(d|e)=0.00  Pp(d|f)=0.00  Pp(d|g)=0.00  Pp(d|h)=0.00  Pp(d|i)=0.42  Pp(d|j)=0.00  Pp(d|k)=0.00  Pp(d|l)=0.00  Pp(d|m)=0.00  Pp(d|n)=0.10  Pp(d|o)=0.00  Pp(d|p)=0.00  Pp(d|q)=0.00  Pp(d|r)=0.00  Pp(d|s)=0.00  Pp(d|t)=0.00  Pp(d|u)=0.00  Pp(d|v)=0.00  Pp(d|w)=0.00  Pp(d|x)=0.00  Pp(d|y)=0.00  Pp(d|z)=0.00  
+Pp(e|a)=0.00  Pp(e|b)=0.00  Pp(e|c)=0.00  Pp(e|d)=0.00  Pp(e|e)=0.02  Pp(e|f)=0.00  Pp(e|g)=0.33  Pp(e|h)=0.88  Pp(e|i)=0.00  Pp(e|j)=0.00  Pp(e|k)=0.00  Pp(e|l)=0.00  Pp(e|m)=0.00  Pp(e|n)=0.00  Pp(e|o)=0.14  Pp(e|p)=0.34  Pp(e|q)=0.00  Pp(e|r)=0.00  Pp(e|s)=0.00  Pp(e|t)=0.00  Pp(e|u)=0.00  Pp(e|v)=0.00  Pp(e|w)=0.00  Pp(e|x)=0.08  Pp(e|y)=0.44  Pp(e|z)=0.00  
+Pp(f|a)=0.00  Pp(f|b)=0.00  Pp(f|c)=0.00  Pp(f|d)=0.00  Pp(f|e)=0.00  Pp(f|f)=0.00  Pp(f|g)=0.46  Pp(f|h)=0.00  Pp(f|i)=0.00  Pp(f|j)=0.00  Pp(f|k)=0.09  Pp(f|l)=0.00  Pp(f|m)=0.00  Pp(f|n)=0.00  Pp(f|o)=0.29  Pp(f|p)=0.00  Pp(f|q)=0.00  Pp(f|r)=0.00  Pp(f|s)=0.00  Pp(f|t)=0.00  Pp(f|u)=0.00  Pp(f|v)=0.40  Pp(f|w)=0.00  Pp(f|x)=0.02  Pp(f|y)=0.00  Pp(f|z)=0.08  
+Pp(g|a)=0.00  Pp(g|b)=0.00  Pp(g|c)=0.00  Pp(g|d)=0.00  Pp(g|e)=0.00  Pp(g|f)=0.43  Pp(g|g)=0.00  Pp(g|h)=0.00  Pp(g|i)=0.00  Pp(g|j)=0.00  Pp(g|k)=0.00  Pp(g|l)=0.00  Pp(g|m)=0.00  Pp(g|n)=0.00  Pp(g|o)=0.00  Pp(g|p)=0.00  Pp(g|q)=0.00  Pp(g|r)=0.00  Pp(g|s)=0.09  Pp(g|t)=0.00  Pp(g|u)=0.00  Pp(g|v)=0.00  Pp(g|w)=0.00  Pp(g|x)=0.00  Pp(g|y)=0.00  Pp(g|z)=0.00  
+Pp(h|a)=0.19  Pp(h|b)=0.00  Pp(h|c)=0.00  Pp(h|d)=0.00  Pp(h|e)=0.67  Pp(h|f)=0.00  Pp(h|g)=0.00  Pp(h|h)=0.00  Pp(h|i)=0.00  Pp(h|j)=0.00  Pp(h|k)=0.00  Pp(h|l)=0.06  Pp(h|m)=0.00  Pp(h|n)=0.00  Pp(h|o)=0.00  Pp(h|p)=0.39  Pp(h|q)=0.00  Pp(h|r)=0.00  Pp(h|s)=0.00  Pp(h|t)=0.00  Pp(h|u)=0.00  Pp(h|v)=0.00  Pp(h|w)=0.06  Pp(h|x)=0.00  Pp(h|y)=0.00  Pp(h|z)=0.00  
+Pp(i|a)=0.00  Pp(i|b)=0.00  Pp(i|c)=0.00  Pp(i|d)=0.65  Pp(i|e)=0.07  Pp(i|f)=0.00  Pp(i|g)=0.00  Pp(i|h)=0.00  Pp(i|i)=0.00  Pp(i|j)=0.00  Pp(i|k)=0.00  Pp(i|l)=0.00  Pp(i|m)=0.83  Pp(i|n)=0.05  Pp(i|o)=0.00  Pp(i|p)=0.05  Pp(i|q)=0.00  Pp(i|r)=0.00  Pp(i|s)=0.00  Pp(i|t)=0.00  Pp(i|u)=0.00  Pp(i|v)=0.40  Pp(i|w)=0.00  Pp(i|x)=0.00  Pp(i|y)=0.01  Pp(i|z)=0.00  
+Pp(j|a)=0.00  Pp(j|b)=0.00  Pp(j|c)=0.00  Pp(j|d)=0.00  Pp(j|e)=0.00  Pp(j|f)=0.00  Pp(j|g)=0.00  Pp(j|h)=0.00  Pp(j|i)=0.00  Pp(j|j)=0.00  Pp(j|k)=0.00  Pp(j|l)=0.00  Pp(j|m)=0.00  Pp(j|n)=0.00  Pp(j|o)=0.00  Pp(j|p)=0.00  Pp(j|q)=0.00  Pp(j|r)=0.00  Pp(j|s)=0.00  Pp(j|t)=0.00  Pp(j|u)=0.00  Pp(j|v)=0.00  Pp(j|w)=0.00  Pp(j|x)=0.00  Pp(j|y)=0.00  Pp(j|z)=0.00  
+Pp(k|a)=0.00  Pp(k|b)=0.11  Pp(k|c)=0.00  Pp(k|d)=0.00  Pp(k|e)=0.00  Pp(k|f)=0.00  Pp(k|g)=0.00  Pp(k|h)=0.00  Pp(k|i)=0.00  Pp(k|j)=0.00  Pp(k|k)=0.00  Pp(k|l)=0.02  Pp(k|m)=0.00  Pp(k|n)=0.00  Pp(k|o)=0.00  Pp(k|p)=0.00  Pp(k|q)=0.00  Pp(k|r)=0.00  Pp(k|s)=0.00  Pp(k|t)=0.00  Pp(k|u)=0.00  Pp(k|v)=0.00  Pp(k|w)=0.00  Pp(k|x)=0.00  Pp(k|y)=0.00  Pp(k|z)=0.00  
+Pp(l|a)=0.62  Pp(l|b)=0.00  Pp(l|c)=0.00  Pp(l|d)=0.30  Pp(l|e)=0.00  Pp(l|f)=0.00  Pp(l|g)=0.20  Pp(l|h)=0.00  Pp(l|i)=0.00  Pp(l|j)=0.04  Pp(l|k)=0.00  Pp(l|l)=0.00  Pp(l|m)=0.08  Pp(l|n)=0.00  Pp(l|o)=0.00  Pp(l|p)=0.00  Pp(l|q)=0.00  Pp(l|r)=0.00  Pp(l|s)=0.00  Pp(l|t)=0.00  Pp(l|u)=0.00  Pp(l|v)=0.00  Pp(l|w)=0.00  Pp(l|x)=0.00  Pp(l|y)=0.00  Pp(l|z)=0.00  
+Pp(m|a)=0.12  Pp(m|b)=0.11  Pp(m|c)=0.09  Pp(m|d)=0.02  Pp(m|e)=0.00  Pp(m|f)=0.00  Pp(m|g)=0.00  Pp(m|h)=0.00  Pp(m|i)=0.00  Pp(m|j)=0.00  Pp(m|k)=0.00  Pp(m|l)=0.00  Pp(m|m)=0.00  Pp(m|n)=0.00  Pp(m|o)=0.00  Pp(m|p)=0.00  Pp(m|q)=0.00  Pp(m|r)=0.00  Pp(m|s)=0.00  Pp(m|t)=0.00  Pp(m|u)=0.00  Pp(m|v)=0.00  Pp(m|w)=0.00  Pp(m|x)=0.00  Pp(m|y)=0.00  Pp(m|z)=0.54  
+Pp(n|a)=0.00  Pp(n|b)=0.00  Pp(n|c)=0.00  Pp(n|d)=0.00  Pp(n|e)=0.00  Pp(n|f)=0.00  Pp(n|g)=0.00  Pp(n|h)=0.00  Pp(n|i)=0.00  Pp(n|j)=0.00  Pp(n|k)=0.00  Pp(n|l)=0.00  Pp(n|m)=0.00  Pp(n|n)=0.00  Pp(n|o)=0.00  Pp(n|p)=0.00  Pp(n|q)=0.00  Pp(n|r)=0.03  Pp(n|s)=0.00  Pp(n|t)=0.00  Pp(n|u)=0.06  Pp(n|v)=0.16  Pp(n|w)=0.42  Pp(n|x)=0.27  Pp(n|y)=0.49  Pp(n|z)=0.00  
+Pp(o|a)=0.00  Pp(o|b)=0.00  Pp(o|c)=0.00  Pp(o|d)=0.00  Pp(o|e)=0.00  Pp(o|f)=0.00  Pp(o|g)=0.00  Pp(o|h)=0.00  Pp(o|i)=0.02  Pp(o|j)=0.00  Pp(o|k)=0.00  Pp(o|l)=0.05  Pp(o|m)=0.00  Pp(o|n)=0.00  Pp(o|o)=0.43  Pp(o|p)=0.00  Pp(o|q)=0.00  Pp(o|r)=0.35  Pp(o|s)=0.00  Pp(o|t)=0.00  Pp(o|u)=0.32  Pp(o|v)=0.00  Pp(o|w)=0.00  Pp(o|x)=0.50  Pp(o|y)=0.00  Pp(o|z)=0.00  
+Pp(p|a)=0.00  Pp(p|b)=0.00  Pp(p|c)=0.05  Pp(p|d)=0.00  Pp(p|e)=0.00  Pp(p|f)=0.00  Pp(p|g)=0.00  Pp(p|h)=0.01  Pp(p|i)=0.00  Pp(p|j)=0.00  Pp(p|k)=0.00  Pp(p|l)=0.00  Pp(p|m)=0.00  Pp(p|n)=0.00  Pp(p|o)=0.00  Pp(p|p)=0.00  Pp(p|q)=0.00  Pp(p|r)=0.09  Pp(p|s)=0.00  Pp(p|t)=0.00  Pp(p|u)=0.00  Pp(p|v)=0.00  Pp(p|w)=0.33  Pp(p|x)=0.00  Pp(p|y)=0.00  Pp(p|z)=0.00  
+Pp(q|a)=0.02  Pp(q|b)=0.00  Pp(q|c)=0.00  Pp(q|d)=0.00  Pp(q|e)=0.00  Pp(q|f)=0.00  Pp(q|g)=0.00  Pp(q|h)=0.00  Pp(q|i)=0.00  Pp(q|j)=0.00  Pp(q|k)=0.00  Pp(q|l)=0.00  Pp(q|m)=0.00  Pp(q|n)=0.00  Pp(q|o)=0.00  Pp(q|p)=0.00  Pp(q|q)=0.00  Pp(q|r)=0.00  Pp(q|s)=0.00  Pp(q|t)=0.00  Pp(q|u)=0.00  Pp(q|v)=0.04  Pp(q|w)=0.00  Pp(q|x)=0.00  Pp(q|y)=0.00  Pp(q|z)=0.00  
+Pp(r|a)=0.00  Pp(r|b)=0.06  Pp(r|c)=0.50  Pp(r|d)=0.00  Pp(r|e)=0.00  Pp(r|f)=0.00  Pp(r|g)=0.00  Pp(r|h)=0.00  Pp(r|i)=0.00  Pp(r|j)=0.00  Pp(r|k)=0.03  Pp(r|l)=0.31  Pp(r|m)=0.00  Pp(r|n)=0.00  Pp(r|o)=0.00  Pp(r|p)=0.00  Pp(r|q)=0.00  Pp(r|r)=0.00  Pp(r|s)=0.01  Pp(r|t)=0.10  Pp(r|u)=0.58  Pp(r|v)=0.00  Pp(r|w)=0.00  Pp(r|x)=0.00  Pp(r|y)=0.00  Pp(r|z)=0.00  
+Pp(s|a)=0.00  Pp(s|b)=0.22  Pp(s|c)=0.00  Pp(s|d)=0.00  Pp(s|e)=0.00  Pp(s|f)=0.00  Pp(s|g)=0.00  Pp(s|h)=0.00  Pp(s|i)=0.45  Pp(s|j)=0.00  Pp(s|k)=0.00  Pp(s|l)=0.00  Pp(s|m)=0.08  Pp(s|n)=0.00  Pp(s|o)=0.00  Pp(s|p)=0.00  Pp(s|q)=0.00  Pp(s|r)=0.00  Pp(s|s)=0.00  Pp(s|t)=0.84  Pp(s|u)=0.00  Pp(s|v)=0.00  Pp(s|w)=0.00  Pp(s|x)=0.14  Pp(s|y)=0.00  Pp(s|z)=0.04  
+Pp(t|a)=0.00  Pp(t|b)=0.00  Pp(t|c)=0.00  Pp(t|d)=0.00  Pp(t|e)=0.00  Pp(t|f)=0.57  Pp(t|g)=0.00  Pp(t|h)=0.00  Pp(t|i)=0.00  Pp(t|j)=0.00  Pp(t|k)=0.00  Pp(t|l)=0.00  Pp(t|m)=0.00  Pp(t|n)=0.00  Pp(t|o)=0.00  Pp(t|p)=0.00  Pp(t|q)=0.00  Pp(t|r)=0.00  Pp(t|s)=0.89  Pp(t|t)=0.00  Pp(t|u)=0.00  Pp(t|v)=0.00  Pp(t|w)=0.00  Pp(t|x)=0.00  Pp(t|y)=0.00  Pp(t|z)=0.00  
+Pp(u|a)=0.00  Pp(u|b)=0.00  Pp(u|c)=0.36  Pp(u|d)=0.00  Pp(u|e)=0.00  Pp(u|f)=0.00  Pp(u|g)=0.00  Pp(u|h)=0.00  Pp(u|i)=0.00  Pp(u|j)=0.00  Pp(u|k)=0.00  Pp(u|l)=0.00  Pp(u|m)=0.00  Pp(u|n)=0.35  Pp(u|o)=0.00  Pp(u|p)=0.00  Pp(u|q)=0.00  Pp(u|r)=0.50  Pp(u|s)=0.00  Pp(u|t)=0.00  Pp(u|u)=0.00  Pp(u|v)=0.00  Pp(u|w)=0.00  Pp(u|x)=0.00  Pp(u|y)=0.05  Pp(u|z)=0.00  
+Pp(v|a)=0.04  Pp(v|b)=0.00  Pp(v|c)=0.00  Pp(v|d)=0.00  Pp(v|e)=0.00  Pp(v|f)=0.00  Pp(v|g)=0.00  Pp(v|h)=0.00  Pp(v|i)=0.02  Pp(v|j)=0.00  Pp(v|k)=0.00  Pp(v|l)=0.00  Pp(v|m)=0.00  Pp(v|n)=0.00  Pp(v|o)=0.00  Pp(v|p)=0.00  Pp(v|q)=0.36  Pp(v|r)=0.00  Pp(v|s)=0.00  Pp(v|t)=0.00  Pp(v|u)=0.00  Pp(v|v)=0.00  Pp(v|w)=0.00  Pp(v|x)=0.00  Pp(v|y)=0.00  Pp(v|z)=0.15  
+Pp(w|a)=0.00  Pp(w|b)=0.00  Pp(w|c)=0.00  Pp(w|d)=0.02  Pp(w|e)=0.00  Pp(w|f)=0.00  Pp(w|g)=0.00  Pp(w|h)=0.00  Pp(w|i)=0.00  Pp(w|j)=0.00  Pp(w|k)=0.03  Pp(w|l)=0.00  Pp(w|m)=0.00  Pp(w|n)=0.00  Pp(w|o)=0.00  Pp(w|p)=0.18  Pp(w|q)=0.00  Pp(w|r)=0.03  Pp(w|s)=0.00  Pp(w|t)=0.00  Pp(w|u)=0.00  Pp(w|v)=0.00  Pp(w|w)=0.15  Pp(w|x)=0.00  Pp(w|y)=0.00  Pp(w|z)=0.00  
+Pp(x|a)=0.00  Pp(x|b)=0.00  Pp(x|c)=0.00  Pp(x|d)=0.00  Pp(x|e)=0.00  Pp(x|f)=0.00  Pp(x|g)=0.00  Pp(x|h)=0.00  Pp(x|i)=0.00  Pp(x|j)=0.00  Pp(x|k)=0.00  Pp(x|l)=0.00  Pp(x|m)=0.00  Pp(x|n)=0.00  Pp(x|o)=0.14  Pp(x|p)=0.00  Pp(x|q)=0.00  Pp(x|r)=0.00  Pp(x|s)=0.00  Pp(x|t)=0.00  Pp(x|u)=0.00  Pp(x|v)=0.00  Pp(x|w)=0.00  Pp(x|x)=0.00  Pp(x|y)=0.00  Pp(x|z)=0.00  
+Pp(y|a)=0.00  Pp(y|b)=0.00  Pp(y|c)=0.00  Pp(y|d)=0.00  Pp(y|e)=0.00  Pp(y|f)=0.00  Pp(y|g)=0.00  Pp(y|h)=0.00  Pp(y|i)=0.00  Pp(y|j)=0.00  Pp(y|k)=0.00  Pp(y|l)=0.00  Pp(y|m)=0.00  Pp(y|n)=0.50  Pp(y|o)=0.00  Pp(y|p)=0.00  Pp(y|q)=0.64  Pp(y|r)=0.00  Pp(y|s)=0.00  Pp(y|t)=0.06  Pp(y|u)=0.00  Pp(y|v)=0.00  Pp(y|w)=0.03  Pp(y|x)=0.00  Pp(y|y)=0.00  Pp(y|z)=0.00  
+Pp(z|a)=0.00  Pp(z|b)=0.00  Pp(z|c)=0.00  Pp(z|d)=0.00  Pp(z|e)=0.00  Pp(z|f)=0.00  Pp(z|g)=0.00  Pp(z|h)=0.00  Pp(z|i)=0.00  Pp(z|j)=0.00  Pp(z|k)=0.00  Pp(z|l)=0.00  Pp(z|m)=0.00  Pp(z|n)=0.00  Pp(z|o)=0.00  Pp(z|p)=0.00  Pp(z|q)=0.00  Pp(z|r)=0.00  Pp(z|s)=0.00  Pp(z|t)=0.00  Pp(z|u)=0.00  Pp(z|v)=0.00  Pp(z|w)=0.00  Pp(z|x)=0.00  Pp(z|y)=0.00  Pp(z|z)=0.00  

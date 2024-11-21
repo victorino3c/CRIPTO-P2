@@ -8,13 +8,13 @@ U=utiles/
 T=textos/
 D=des/
 
-all: $(P)seguridad_perfecta
+all: $(P)seg-perf $(D)des
 
-run_seguridad_perfecta_P: $(P)seguridad_perfecta
-	$(P)seguridad_perfecta -P -i $(T)hamlet.txt -o $(T)adios.txt
+run_seg-perf_P: $(P)seg-perf
+	$(P)seg-perf -P -i $(T)hamlet.txt -o $(P)salida.txt
 
-run_seguridad_perfecta_I: $(P)seguridad_perfecta
-	$(P)seguridad_perfecta -I -i $(T)hamlet.txt
+run_seg-perf_I: $(P)seg-perf
+	$(P)seg-perf -I -i $(T)hamlet.txt -o $(P)salida.txt
 
 run_des: $(D)des
 	$(D)des -C -k 1234567890123456 -i $(T)hola.txt -o $(T)adios.txt
@@ -30,10 +30,10 @@ run_afin_C: $(A)afin
 #EJECUTABLES                                                                  #
 ###############################################################################
 
-$(P)seguridad_perfecta: $(O)seguridad_perfecta.o $(O)afin.o $(O)utils.o
+$(P)seg-perf: $(O)seg-perf.o $(O)afin.o $(O)utils.o
 	$(CC) -o $@ $^ $(LIBRARY)
 
-$(O)seguridad_perfecta.o: $(P)seguridad_perfecta.c $(A)afin.h $(U)utils.h
+$(O)seg-perf.o: $(P)seg-perf.c $(A)afin.h $(U)utils.h
 	$(CC) -o $@ $(FLAGS) $<
 
 $(D)des: $(O)des.o $(O)utils.o
@@ -49,4 +49,4 @@ $(O)utils.o: $(U)utils.c $(U)utils.h
 	$(CC) -o $@ $(FLAGS) $<
 
 clean:
-	rm -f $(O)*.o $(P)seguridad_perfecta 
+	rm -f $(O)*.o $(P)seg-perf 
