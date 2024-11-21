@@ -26,6 +26,7 @@
 #define NUM_S_BOXES 8
 #define ROWS_PER_SBOX 4
 #define COLUMNS_PER_SBOX 16
+#define DES_NUM_ROUNDS 16
 
 
 /* "permutacion" PC1 */
