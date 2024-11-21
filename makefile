@@ -6,6 +6,7 @@ O=obj/
 A=afin/
 U=utiles/
 T=textos/
+D=des/
 
 all: $(P)seguridad_perfecta
 
@@ -14,6 +15,9 @@ run_seguridad_perfecta_P: $(P)seguridad_perfecta
 
 run_seguridad_perfecta_I: $(P)seguridad_perfecta
 	$(P)seguridad_perfecta -I -i $(T)hamlet.txt
+
+run_des: $(D)des
+	$(D)des -C -k 1234567890123456 -i $(T)hola.txt -o $(T)adios.txt
 
 # COMANDOS EJECUCION AFIN #
 run_afin_D: $(A)afin
@@ -32,6 +36,11 @@ $(P)seguridad_perfecta: $(O)seguridad_perfecta.o $(O)afin.o $(O)utils.o
 $(O)seguridad_perfecta.o: $(P)seguridad_perfecta.c $(A)afin.h $(U)utils.h
 	$(CC) -o $@ $(FLAGS) $<
 
+$(D)des: $(O)des.o $(O)utils.o
+	$(CC) -o $@ $^ $(LIBRARY)
+
+$(O)des.o: $(D)des.c $(U)utils.h
+	$(CC) -o $@ $(FLAGS) $<
 
 $(O)afin.o: $(A)afin.c $(A)afin.h $(U)utils.h
 	$(CC) -o $@ $(FLAGS) $<
