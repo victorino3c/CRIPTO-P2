@@ -10,7 +10,7 @@ T=textos/
 all: $(P)seguridad_perfecta
 
 run_seguridad_perfecta_P: $(P)seguridad_perfecta
-	$(P)seguridad_perfecta -P -i $(T)hamlet.txt
+	$(P)seguridad_perfecta -P -i $(T)hamlet.txt -o $(T)adios.txt
 
 run_seguridad_perfecta_I: $(P)seguridad_perfecta
 	$(P)seguridad_perfecta -I -i $(T)hamlet.txt

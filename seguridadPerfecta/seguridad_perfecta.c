@@ -363,9 +363,7 @@ ConditionalProbabilty *createConditionalProbabilty(int lang_size) {
     for (int i = 0; i < lang_size; i++) {
         cond_prob->prob[i] = (float *) calloc(lang_size, sizeof(float));
     }
-
-    /*Initialize everything to 0*/
-
+    
     return cond_prob;
 }
 
