@@ -63,4 +63,4 @@ $(O)utils.o: $(U)utils.c $(U)utils.h
 	$(CC) -o $@ $(FLAGS) $<
 
 clean:
-	rm -f $(O)*.o $(P)seg-perf $(D)des $(AS)aes
+	rm -f $(O)*.o $(P)seg-perf $(D)des $(AS)aes $(A)afin
