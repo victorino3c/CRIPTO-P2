@@ -11,4 +11,4 @@ set ytics 5
 set xtics 3
 
 # Ahora asignamos el índice de cada línea (1, 2, 3, ..., 128) como el eje X
-plot 'aes/output.txt' using (column(0) + 1):1 with boxes title 'Frequency'
+plot 'aes/frequencies.txt' using (column(0) + 1):1 with boxes title 'Frequency'

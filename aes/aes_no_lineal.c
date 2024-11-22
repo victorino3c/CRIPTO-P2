@@ -9,7 +9,7 @@
 
 #define ELEM_SIZE_BYTE 16 // size in bytes of the 128 bits elem
 
-#define OUTPUT_FILE "aes/output.txt"
+#define OUTPUT_FILE "aes/frequencies.txt"
 #define GP_FILE "aes/plotHistogram.gp"
 #define DEFAULT_OUTPUT_MODE "o"
 
@@ -70,19 +70,19 @@ __int128_t random_change_128(__int128_t elem);
 __int128_t one_bit_change_128(__int128_t elem);
 
 /**
- * @brief Apply 10 rounds of S-boxes to a 128 bits elem
+ * @brief Apply a given number of rounds (NUMBER_OF_ROUNDS macro) of S-boxes to a 128 bits elem
  * 
  * @param elem 128 bits elem
  * 
  * @return the transformed 128 bits elem
  */
-__int128_t sboxes10rounds(__int128_t elem);
+__int128_t sboxesrounds(__int128_t elem);
 
 /**
  * @brief Generate the frequencies of the different bits
  * 
  * @param frequencies array of frequencies
- * @param different_bits array of different bits in each test
+ * @param different_bits array of number of different bits in each test
  */
 void generate_difference_frequencies(int *frequencies, int *different_bits);
 
@@ -98,6 +98,7 @@ int main(int argc, char *argv[]) {
     char *mode = NULL;
     FILE *output = NULL;
 
+    /*Check entry parameters*/
     if (argc > 1) {
         if (strcmp(argv[1], "-t") == 0) {
             mode = "t";
@@ -129,11 +130,11 @@ int main(int argc, char *argv[]) {
     int frequencies[ELEM_SIZE_BYTE * 8];
 
     /*Transform base_entry using S-boxes*/
-    base_exit = sboxes10rounds(base_entry);
+    base_exit = sboxesrounds(base_entry);
 
     for (int i = 0; i < NUMBER_OF_TESTS; i++) {
         entry = random_change_128(entry);
-        exit = sboxes10rounds(entry);
+        exit = sboxesrounds(entry);
         different_bits[i] = get_128elem_difference_number(base_exit, exit);
     }
 
@@ -218,7 +219,7 @@ __int128_t one_bit_change_128(__int128_t elem) {
     return elem ^ change;
 }
 
-__int128_t sboxes10rounds(__int128_t elem) {
+__int128_t sboxesrounds(__int128_t elem) {
     __int128_t elem_exit = elem;
 
     for (int i = 0; i < NUMBER_OF_ROUNDS; i++) {

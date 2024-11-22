@@ -53,7 +53,7 @@ $(O)des.o: $(D)des.c $(U)utils.h
 $(AS)aes_no_lineal: $(O)aes_no_lineal.o $(O)utils.o
 	$(CC) -o $@ $^ $(LIBRARY)
 
-$(O)aes_no_lineal.o: $(AS)noLinealidadS-box.c $(U)utils.h
+$(O)aes_no_lineal.o: $(AS)aes_no_lineal.c $(U)utils.h
 	$(CC) -o $@ $(FLAGS) $<
 
 $(O)afin.o: $(A)afin.c $(A)afin.h $(U)utils.h
@@ -63,4 +63,4 @@ $(O)utils.o: $(U)utils.c $(U)utils.h
 	$(CC) -o $@ $(FLAGS) $<
 
 clean:
-	rm -f $(O)*.o $(P)seg-perf $(D)des $(AS)aes $(A)afin
+	rm -f $(O)*.o $(P)seg-perf $(D)des $(AS)aes_no_lineal $(A)afin $(AS)histogram.png $(AS)frequencies.txt
