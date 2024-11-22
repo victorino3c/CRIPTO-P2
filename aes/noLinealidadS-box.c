@@ -1,24 +1,13 @@
 
-#include <stdio.h>
-#include <stdint.h>
-#include <time.h>
-#include <stdlib.h>
-#include <string.h>
-
-#include "AES_tables.c"
-
-//Exit: 0xc918b1bcb8651d8cc918b1bcb8651d8c
+#include "../utiles/utils.h"
 
 #define INITIAL_ELEM_HIGH 0x123456789ABCDEF0 // upper 64 bits
 #define INITIAL_ELEM_LOW 0x123456789ABCDEF0 // lower 64 bits
 
-#define ELEM_SIZE_BYTE 16 // size in bytes of the 128 bits elem
-
 #define NUMBER_OF_ROUNDS 1
 #define NUMBER_OF_TESTS 1024
 
-#define HISTOGRAM_LOWER_BOUND 40
-#define HISTOGRAM_UPPER_BOUND 90
+#define ELEM_SIZE_BYTE 16 // size in bytes of the 128 bits elem
 
 #define OUTPUT_FILE "aes/output.txt"
 #define GP_FILE "aes/plotHistogram.gp"
@@ -98,25 +87,11 @@ __int128_t sboxes10rounds(__int128_t elem);
 void generate_difference_frequencies(int *frequencies, int *different_bits);
 
 /**
- * @brief Print the histogram of the frequencies
- * 
- * @param frequencies array of frequencies
- */
-void print_histogram(int *frequencies);
-
-/**
  * @brief Print the frequencies in the output file
  * 
  * @param frequencies array of frequencies
  */
 void print_frequencies_in_output(int *frequencies, FILE *output);
-
-/**
- * @brief Generate the histogram with gnuplot
- * 
- * @param script_filename name of the script file
- */
-void generate_histogram_with_gnuplot(const char *script_filename);
 
 int main(int argc, char *argv[]) {
 
@@ -266,27 +241,9 @@ void generate_difference_frequencies(int *frequencies, int *different_bits) {
     }
 }
 
-void print_histogram(int *frequencies) {
-    printf("Histograma de frecuencias de bits diferentes:\n");
-    for (int i = HISTOGRAM_LOWER_BOUND; i < HISTOGRAM_UPPER_BOUND; i++) {
-        printf("%d | ", i);
-        for (int j = 0; j < frequencies[i]; j++) {
-            printf("*");
-        }
-        printf("\n");
-    }
-    printf("-|----------------------------------------------------------------------------------------------------------\n");
-}
-
 void print_frequencies_in_output(int *frequencies, FILE *output) {
     for (int i = 0; i < ELEM_SIZE_BYTE * 8; i++) {
         //fprintf(output, "%d %d\n", i, frequencies[i]);
         fprintf(output, "%d\n", frequencies[i]);
     }
-}
-
-void generate_histogram_with_gnuplot(const char *script_filename) {
-    char command[256];
-    snprintf(command, sizeof(command), "gnuplot %s", script_filename);
-    system(command);
 }

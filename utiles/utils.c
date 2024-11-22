@@ -410,3 +410,21 @@ void invertPermutation(int *k, int size) {
 
     free(aux);
 }
+
+void print_histogram(int *frequencies) {
+    printf("Histograma de frecuencias de bits diferentes:\n");
+    for (int i = HISTOGRAM_LOWER_BOUND; i < HISTOGRAM_UPPER_BOUND; i++) {
+        printf("%d | ", i);
+        for (int j = 0; j < frequencies[i]; j++) {
+            printf("*");
+        }
+        printf("\n");
+    }
+    printf("-|----------------------------------------------------------------------------------------------------------\n");
+}
+
+void generate_histogram_with_gnuplot(const char *script_filename) {
+    char command[256];
+    snprintf(command, sizeof(command), "gnuplot %s", script_filename);
+    system(command);
+}

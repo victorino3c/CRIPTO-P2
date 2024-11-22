@@ -50,10 +50,10 @@ $(D)des: $(O)des.o $(O)utils.o
 $(O)des.o: $(D)des.c $(U)utils.h
 	$(CC) -o $@ $(FLAGS) $<
 
-$(AS)aes_no_lineal: $(O)aes.o
+$(AS)aes_no_lineal: $(O)aes_no_lineal.o $(O)utils.o
 	$(CC) -o $@ $^ $(LIBRARY)
 
-$(O)aes.o: $(AS)noLinealidadS-box.c
+$(O)aes_no_lineal.o: $(AS)noLinealidadS-box.c $(U)utils.h
 	$(CC) -o $@ $(FLAGS) $<
 
 $(O)afin.o: $(A)afin.c $(A)afin.h $(U)utils.h

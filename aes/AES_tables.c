@@ -1,10 +1,10 @@
 /* Constantes para el AES con clave de 128 bits */
 #define BYTES_PER_WORD 4
-#define ROWS_PER_SBOX 16
-#define COLUMNS_PER_SBOX 16
+#define ROWS_PER_SBOX_AES 16
+#define COLUMNS_PER_SBOX_AES 16
 #define HEX_STRING_SIZE 3
 
-static const char DIRECT_SBOX[ROWS_PER_SBOX][COLUMNS_PER_SBOX][HEX_STRING_SIZE] = {
+static const char DIRECT_SBOX[ROWS_PER_SBOX_AES][COLUMNS_PER_SBOX_AES][HEX_STRING_SIZE] = {
 	{ "63", "7c", "77", "7b", "f2", "6b", "6f", "c5", "30", "01", "67", "2b", "fe", "d7", "ab", "76" },
 	{ "ca", "82", "c9", "7d", "fa", "59", "47", "f0", "ad", "d4", "a2", "af", "9c", "a4", "72", "c0" },
 	{ "b7", "fd", "93", "26", "36", "3f", "f7", "cc", "34", "a5", "e5", "f1", "71", "d8", "31", "15" },
@@ -23,7 +23,7 @@ static const char DIRECT_SBOX[ROWS_PER_SBOX][COLUMNS_PER_SBOX][HEX_STRING_SIZE] 
 	{ "8c", "a1", "89", "0d", "bf", "e6", "42", "68", "41", "99", "2d", "0f", "b0", "54", "bb", "16" }
 };
 
-static const char INVERSE_SBOX[ROWS_PER_SBOX][COLUMNS_PER_SBOX][HEX_STRING_SIZE] = {
+static const char INVERSE_SBOX[ROWS_PER_SBOX_AES][COLUMNS_PER_SBOX_AES][HEX_STRING_SIZE] = {
 	{ "52", "09", "6a", "d5", "30", "36", "a5", "38", "bf", "40", "a3", "9e", "81", "f3", "d7", "fb" },
 	{ "7c", "e3", "39", "82", "9b", "2f", "ff", "87", "34", "8e", "43", "44", "c4", "de", "e9", "cb" },
 	{ "54", "7b", "94", "32", "a6", "c2", "23", "3d", "ee", "4c", "95", "0b", "42", "fa", "c3", "4e" },
