@@ -1,6 +1,6 @@
 #include "des.h"
 
-/* Initialization Vector for ECB */
+/* Initialization Vector for CBC */
 #define DES_IV_BLOCK 0xD48001C68F2325A1
 
 /* Modes: 0 --> ECB | 1 --> CBC */
