@@ -1,3 +1,14 @@
+/**
+ * @file des_cypher.c
+ * @author Nicolas Victorino && Ignacio Nunnez
+ * @brief 
+ * @version 0.1
+ * @date 2024-11-23
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
+
 #include "des.h"
 
 /* Initialization Vector for CBC */
