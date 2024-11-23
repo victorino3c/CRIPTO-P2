@@ -114,7 +114,7 @@ int cifrar(int fd, int fd_out, uint64_t initial_key, type_b type) {
     size_t file_size = lseek(fd, 0, SEEK_END);
     printf("File size: %ld\n", file_size);
 
-    uint8_t filling_bytes = 8 - (file_size % 8);
+    int filling_bytes = 8 - (file_size % 8);
 
     lseek(fd, 0, SEEK_SET);
     lseek(fd_out, 0, SEEK_SET);
@@ -128,13 +128,6 @@ int cifrar(int fd, int fd_out, uint64_t initial_key, type_b type) {
         block = des_cypher(data, iv_block, keys);
         iv_block = block;
         write(fd_out, &block, 8);
-    }
-
-    // Add filling
-    if (filling_bytes != 0) {
-        data <<= 8*filling_bytes;
-    }
-    else {
         data = 0;
     }
 
@@ -183,9 +176,11 @@ int descifrar(int fd, int fd_out, uint64_t initial_key, type_b type) {
         write(fd_out, &block, 8);
     }
 
+    printf("%d Last block: %lx\n", filling_bytes, block);
+
     // Remove filling
     if (filling_bytes != 0) {
-        ftruncate(fd_out, lseek(fd_out, 0, SEEK_END) - filling_bytes);
+        ftruncate(fd_out, lseek(fd_out, 0, SEEK_END) - (filling_bytes));
     }
 
     close(fd);

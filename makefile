@@ -25,10 +25,10 @@ run_des_image_c: $(D)des_cypher
 	$(D)des_cypher -C -k 12345F789AB23456 -i $(B)background.jpg -o $(B)cyphered_background.jpg
 
 run_des_d: $(D)des_cypher
-	$(D)des_cypher -D -k 12345F789AB23456 -i $(B)cyphered_memoria-p1.pdf -o $(B)cyphered_memoria-p1.pdf
+	$(D)des_cypher -D -k 12345F789AB23456 -i $(B)cyphered_memoria-p1.pdf -o $(B)decyphered_memoria-p1.pdf
 
 run_des_image_d: $(D)des_cypher
-	$(D)des_cypher -D -k 12345F789AB23456 -i $(B)cyphered_background.jpg -o $(B)cyphered_background.jpg
+	$(D)des_cypher -D -k 12345F789AB23456 -i $(B)cyphered_background.jpg -o $(B)decyphered_background.jpg
 
 run_aes: $(AS)aes_no_lineal
 	$(AS)aes_no_lineal -o
