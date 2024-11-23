@@ -35,6 +35,31 @@ uint64_t des_cypher(uint64_t block, uint64_t cbc_block, uint64_t *subkeys);
 uint64_t des_decypher(uint64_t block, uint64_t cbc_block, uint64_t *subkeys);
 
 /**
+ * @brief Triple DES cypher
+ * 
+ * @param block Block to cypher
+ * @param cbc_block Initial vector for the CBC mode (IV)
+ * @param keys1 First set of keys
+ * @param keys2 Second set of keys
+ * @param keys3 Third set of keys
+ * 
+ * @return uint64_t Cyphered block
+ */
+uint64_t triple_des_cypher(uint64_t block, uint64_t cbc_block, uint64_t *keys1, uint64_t *keys2, uint64_t *keys3);
+
+/**
+ * @brief Triple DES decypher
+ * 
+ * @param block Block to decypher
+ * @param cbc_block Initial vector for the CBC mode (IV)
+ * @param keys1 First set of keys
+ * @param keys2 Second set of keys
+ * @param keys3 Third set of keys
+ * @return uint64_t Decyphered block
+ */
+uint64_t triple_des_decypher(uint64_t block, uint64_t cbc_block, uint64_t *keys1, uint64_t *keys2, uint64_t *keys3);
+
+/**
  * @brief Calculate the subkeys for the DES algorithm of a given key
  * 
  * @param key Initial key
@@ -145,5 +170,14 @@ uint32_t s_box_permutation(uint32_t right_substituted);
  * @return uint64_t permuted block
  */
 uint64_t inverse_ip_permutation(uint64_t block);
+
+/**
+ * @brief If a string is a hexadecimal number
+ * 
+ * @param str string to check
+ * 
+ * @return int -1 if the string is not a hexadecimal number
+ */
+int is_hex(const char *str);
 
 #endif

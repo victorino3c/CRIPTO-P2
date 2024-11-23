@@ -89,15 +89,6 @@ int check_args(int argc, char *argv[], int* mode, uint64_t* key, char** input_fi
 void print_args_help();
 
 /**
- * @brief If a string is a hexadecimal number
- * 
- * @param str string to check
- * 
- * @return int -1 if the string is not a hexadecimal number
- */
-int is_hex(const char *str);
-
-/**
  * @brief Get the size of the header of a JPEG file
  * 
  * @param fd file descriptor
@@ -216,12 +207,6 @@ int descifrar(int fd, int fd_out, uint64_t initial_key, type_b type) {
 
     calculate_subkeys(initial_key, keys);
 
-    // Revert the order of the keys
-    uint64_t keys_reverted[16];
-    for (int i = 0; i < 16; i++) {
-        keys_reverted[i] = keys[15-i];
-    }
-
     uint64_t data;
     uint64_t iv_block = DES_IV_BLOCK;
 
@@ -230,7 +215,7 @@ int descifrar(int fd, int fd_out, uint64_t initial_key, type_b type) {
 
     while (read(fd, &data, 8) == 8) {
         if(DES_MODE == 0) iv_block = 0;
-        block = des_decypher(data, iv_block, keys_reverted);
+        block = des_decypher(data, iv_block, keys);
         iv_block = data;
         write(fd_out, &block, 8);
     }
@@ -332,15 +317,9 @@ int descifrar_jpeg(int fd, int fd_out, uint64_t initial_key) {
 
     calculate_subkeys(initial_key, keys);
 
-    // Reverse the keys
-    uint64_t keys_reverted[16];
-    for (int i = 0; i < 16; i++) {
-        keys_reverted[i] = keys[15-i];
-    }
-
     while (read(fd, &data, 8) == 8) {
         if(DES_MODE == 0) iv_block = 0;
-        block = des_decypher(data, iv_block, keys_reverted);
+        block = des_decypher(data, iv_block, keys);
         iv_block = data;
         write(fd_out, &block, 8);
         data = 0;
@@ -413,23 +392,6 @@ void print_args_help()
     printf("Output file is optional. Will use one name by the default.\n");
 }
 
-int is_hex(const char *str) {
-    if (str == NULL || *str == '\0') {
-        return -1; // Cadena vacía o nula no es válida.
-    }
-
-    // Recorre cada carácter de la cadena.
-    for (int i = 0; str[i] != '\0'; i++) {
-        char c = str[i];
-        // Verifica si el carácter no está entre 0-9 ni A-F.
-        if (!(isdigit(c) || (c >= 'A' && c <= 'F'))) {
-            return -1;
-        }
-    }
-
-    return 0; // Todos los caracteres son válidos.
-}
-
 int jpg_size_header(int fd) {
 
     // Guardamos la posicion en la que estabamos en fd
@@ -457,9 +419,6 @@ int jpg_size_header(int fd) {
     // Guardar la cabecera en un archivo separado
     header_size = ftell(infile);  // Tamaño hasta el encabezado
     printf("Header size: %ld\n", header_size);
-
-    // Cerrar el archivo
-    //fclose(infile);
 
     // Restaurar la posición original
     lseek(fd, fd_pos, SEEK_SET);

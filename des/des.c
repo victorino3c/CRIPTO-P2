@@ -27,7 +27,38 @@ uint64_t des_cypher(uint64_t block, uint64_t cbc_block, uint64_t *subkeys)
 uint64_t des_decypher(uint64_t block, uint64_t cbc_block, uint64_t *subkeys)
 {
 
-    return encode_block(block, cbc_block, subkeys, DECYPHER);
+    // Revert the order of the keys
+    uint64_t subkeys_reverted[16];
+    for (int i = 0; i < 16; i++)
+    {
+        subkeys_reverted[i] = subkeys[15 - i];
+    }
+
+    return encode_block(block, cbc_block, subkeys_reverted, DECYPHER);
+}
+
+/* Auxiliar function for triple_des_cypher */
+uint64_t triple_des_cypher(uint64_t block, uint64_t cbc_block, uint64_t *keys1, uint64_t *keys2, uint64_t *keys3)
+{
+    uint64_t block_cyphered;
+
+    block_cyphered = des_cypher(block, cbc_block, keys1);
+    block_cyphered = des_decypher(block_cyphered, cbc_block, keys2);
+    block_cyphered = des_cypher(block_cyphered, cbc_block, keys3);
+
+    return block_cyphered;
+}
+
+/* Auxiliar function for triple_des_decypher */
+uint64_t triple_des_decypher(uint64_t block, uint64_t cbc_block, uint64_t *keys1, uint64_t *keys2, uint64_t *keys3)
+{
+    uint64_t block_decyphered;
+
+    block_decyphered = des_decypher(block, cbc_block, keys3);
+    block_decyphered = des_cypher(block_decyphered, cbc_block, keys2);
+    block_decyphered = des_decypher(block_decyphered, cbc_block, keys1);
+
+    return block_decyphered;
 }
 
 /* Function calculator of the subkeys */
@@ -293,57 +324,20 @@ uint64_t inverse_ip_permutation(uint64_t block)
     return block_permuted;
 }
 
-/*int test(){*/
-// Step 1
+/* Checks if a string is an hexadecimal number valid */
+int is_hex(const char *str) {
+    if (str == NULL || *str == '\0') {
+        return -1; // Cadena vacía o nula no es válida.
+    }
 
-// Test calculate_subkeys
-/*uint64_t key = 0x133457799BBCDFF1;
-uint64_t subkey = permute_original_key(key);
-printf("Subkey: 0x%lx\n", subkey);*/
+    // Recorre cada carácter de la cadena.
+    for (int i = 0; str[i] != '\0'; i++) {
+        char c = str[i];
+        // Verifica si el carácter no está entre 0-9 ni A-F.
+        if (!(isdigit(c) || (c >= 'A' && c <= 'F'))) {
+            return -1;
+        }
+    }
 
-// Test split_key
-/*uint64_t key = 0xf0ccaaf556678f;
-uint32_t left, right;
-(void) split_64block(key, &left, &right);
-printf("Left: 0x%x\n", left);
-printf("Right: 0x%x\n", right);*/
-
-// Test rotate_key_round
-/*uint32_t key = 0xF0CCAAF;
-uint32_t new_key = rotate_key_round(key, 0);
-printf("New key: 0x%x\n", new_key);*/
-
-// Test merge_and_permute_key
-/*uint32_t left = 0xE19955F;
-uint32_t right = 0xAACCF1E;
-uint64_t key = merge_and_permute_key(left, right);
-printf("Key: 0x%lx\n", key);*/
-
-// Step 2
-
-// Test ip_permutation
-/*uint64_t text = 0x123456789ABCDEF;
-uint64_t text_permuted = ip_permutation(text);
-printf("Text permuted: 0x%lx\n", text_permuted);*/
-
-// Test e_permutation
-/*uint32_t right = 0xF0AAF0AA;
-uint64_t right_extended = extend_and_permute_E(right);
-printf("Right extended and permuted: 0x%lx\n", right_extended);*/
-
-// Test s_box_substitution
-/*uint64_t right_extended = 0x6117BA866527;
-uint32_t right_substituted = s_box_substitution(right_extended);
-printf("Right substituted: 0x%x\n", right_substituted);*/
-
-// Test s_box_permutation
-/*uint32_t right_substituted = 0x5C82B597;
-uint32_t right_permuted = 0;
-right_permuted = s_box_permutation(right_substituted);
-printf("Right permuted: 0x%x\n", right_permuted);*/
-
-// Test inverse_ip_permutation
-/*uint64_t block = 0xA4CD99543423234;
-uint64_t block_permuted = inverse_ip_permutation(block);
-printf("Block permuted: 0x%lx\n", block_permuted);*/
-/*}*/
+    return 0; // Todos los caracteres son válidos.
+}

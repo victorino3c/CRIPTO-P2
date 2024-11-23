@@ -10,7 +10,7 @@ B=binarios/
 D=des/
 AS=aes/
 
-all: $(P)seg-perf $(D)des_cypher $(AS)aes_no_lineal
+all: $(P)seg-perf $(D)des_cypher $(D)triple_des_cypher $(AS)aes_no_lineal
 
 run_seg-perf_P: $(P)seg-perf
 	$(P)seg-perf -P -i $(T)hamlet.txt -o $(P)salida.txt
@@ -29,6 +29,12 @@ run_des_d: $(D)des_cypher
 
 run_des_image_d: $(D)des_cypher
 	$(D)des_cypher -D -k 12345F789AB23456 -i $(B)cyphered_background.jpg -o $(B)decyphered_background.jpg
+
+run_triple_des_c: $(D)triple_des_cypher
+	$(D)triple_des_cypher -C -k 133457799BBCDFF11223345566778899AABBCCDDEEFF0011 -i $(B)memoria-p1.pdf -o $(B)cyphered_memoria-p1.pdf
+
+run_triple_des_d: $(D)triple_des_cypher
+	$(D)triple_des_cypher -D -k 133457799BBCDFF11223345566778899AABBCCDDEEFF0011 -i $(B)cyphered_memoria-p1.pdf -o $(B)decyphered_memoria-p1.pdf
 
 run_aes: $(AS)aes_no_lineal
 	$(AS)aes_no_lineal -o
@@ -56,6 +62,12 @@ $(D)des_cypher: $(O)des_cypher.o $(O)des.o $(O)utils.o
 $(O)des_cypher.o: $(D)des_cypher.c $(D)des.h $(U)utils.h
 	$(CC) -o $@ $(FLAGS) $<
 
+$(D)triple_des_cypher: $(O)triple_des_cypher.o $(O)des.o $(O)utils.o
+	$(CC) -o $@ $^ $(LIBRARY)
+
+$(O)triple_des_cypher.o: $(D)triple_des_cypher.c $(D)des.h $(U)utils.h
+	$(CC) -o $@ $(FLAGS) $<
+
 $(A)afin: $(O)afin.o
 	$(CC) -o $@ $^ $(LIBRARY)
 
@@ -78,4 +90,4 @@ $(O)utils.o: $(U)utils.c $(U)utils.h
 	$(CC) -o $@ $(FLAGS) $<
 
 clean:
-	rm -f $(O)*.o $(P)seg-perf $(D)des_cypher $(AS)aes_no_lineal $(A)afin $(AS)histogram.png $(AS)frequencies.txt
+	rm -f $(O)*.o $(P)seg-perf $(D)des_cypher $(D)triple_des_cypher $(AS)aes_no_lineal $(A)afin $(AS)histogram.png $(AS)frequencies.txt
