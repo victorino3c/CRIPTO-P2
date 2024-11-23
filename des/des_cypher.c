@@ -1,7 +1,12 @@
 #include "des.h"
 
+/* Initialization Vector for ECB */
 #define DES_IV_BLOCK 0xD48001C68F2325A1
 
+/* Modes: 0 --> ECB | 1 --> CBC */
+#define DES_MODE 1 
+
+/* Types of binaries */
 typedef enum {
     STD_BINARY,
     JPEG,
@@ -29,6 +34,28 @@ int cifrar(int fd, int fd_out, uint64_t initial_key, type_b type_binary);
  * @return int 0 if everything is ok
  */
 int descifrar(int fd, int fd_out, uint64_t initial_key, type_b type_binary);
+
+/**
+ * @brief Cypher using DES fd on fd_out with initial_key. For images is slightly different.
+ *        It will preserve the header of the image in order to keep the image valid.
+ * 
+ * @param fd file descriptor to read
+ * @param fd_out file descriptor to write
+ * @param initial_key initial key
+ * @return int 0 if everything is ok
+ */
+int cifrar_jpeg(int fd, int fd_out, uint64_t initial_key);
+
+/**
+ * @brief Decypher using DES fd on fd_out with initial_key. For images is slightly different.
+ *       It will preserve the header of the image in order to keep the image valid. 
+ * 
+ * @param fd file descriptor to read
+ * @param fd_out file descriptor to write
+ * @param initial_key initial key
+ * @return int 0 if everything is ok
+ */
+int descifrar_jpeg(int fd, int fd_out, uint64_t initial_key);
 
 /**
  * @brief Check the entry arguments
@@ -59,6 +86,12 @@ void print_args_help();
  */
 int is_hex(const char *str);
 
+/**
+ * @brief Get the size of the header of a JPEG file
+ * 
+ * @param fd file descriptor
+ * @return int size of the header
+ */
 int jpg_size_header(int fd);
 
 int main(int argc, char *argv[])
@@ -108,16 +141,21 @@ int main(int argc, char *argv[])
 
 int cifrar(int fd, int fd_out, uint64_t initial_key, type_b type) { 
 
+    // If the file is a JPEG file, we will use a different function
+    if(type == JPEG) {
+        return cifrar_jpeg(fd, fd_out, initial_key);
+    }
+
     uint64_t keys[DES_NUM_ROUNDS];
     uint64_t block;
 
     size_t file_size = lseek(fd, 0, SEEK_END);
     printf("File size: %ld\n", file_size);
 
-    int filling_bytes = 8 - (file_size % 8);
-
     lseek(fd, 0, SEEK_SET);
     lseek(fd_out, 0, SEEK_SET);
+
+    int filling_bytes = (file_size) % 8;
 
     uint64_t data;
     uint64_t iv_block = DES_IV_BLOCK;
@@ -125,6 +163,7 @@ int cifrar(int fd, int fd_out, uint64_t initial_key, type_b type) {
     calculate_subkeys(initial_key, keys);
 
     while (read(fd, &data, 8) == 8) {
+        if(DES_MODE == 0) iv_block = 0;
         block = des_cypher(data, iv_block, keys);
         iv_block = block;
         write(fd_out, &block, 8);
@@ -135,6 +174,8 @@ int cifrar(int fd, int fd_out, uint64_t initial_key, type_b type) {
     write(fd_out, &block, 8);
 
     write(fd_out, &filling_bytes, 1);
+
+    printf("filling bytes: %d\n", filling_bytes);
     
     close(fd);
     close(fd_out);
@@ -144,20 +185,23 @@ int cifrar(int fd, int fd_out, uint64_t initial_key, type_b type) {
 
 int descifrar(int fd, int fd_out, uint64_t initial_key, type_b type) {
 
+    if(type == JPEG){
+        return descifrar_jpeg(fd, fd_out, initial_key);
+    }
+
     uint8_t filling_bytes;
     uint64_t keys[DES_NUM_ROUNDS];
     uint64_t block;
+    int tt = 0;
 
     // Read last byte of the file
-    lseek(fd, -1, SEEK_END);
-    read(fd, &filling_bytes, 8);
+    lseek(fd, -1 -tt, SEEK_END);
+    read(fd, &filling_bytes, 1);
 
-    //printf("Filling bytes: %d\n", filling_bytes);
+    printf("Filling bytes: %d\n", filling_bytes);
 
     // Remove last byte with the filling
     ftruncate(fd, lseek(fd, 0, SEEK_END) - 1);
-
-    lseek(fd, type, SEEK_SET);
 
     calculate_subkeys(initial_key, keys);
 
@@ -170,7 +214,11 @@ int descifrar(int fd, int fd_out, uint64_t initial_key, type_b type) {
     uint64_t data;
     uint64_t iv_block = DES_IV_BLOCK;
 
+    lseek(fd, 0, SEEK_SET);
+    lseek(fd_out, 0, SEEK_SET);
+
     while (read(fd, &data, 8) == 8) {
+        if(DES_MODE == 0) iv_block = 0;
         block = des_decypher(data, iv_block, keys_reverted);
         iv_block = data;
         write(fd_out, &block, 8);
@@ -180,9 +228,116 @@ int descifrar(int fd, int fd_out, uint64_t initial_key, type_b type) {
 
     // Remove filling
     if (filling_bytes != 0) {
-        ftruncate(fd_out, lseek(fd_out, 0, SEEK_END) - (filling_bytes));
+        ftruncate(fd_out, lseek(fd_out, 0, SEEK_END) - (8 - filling_bytes));
     }
 
+    close(fd);
+    close(fd_out);
+
+    return 0;
+}
+
+int cifrar_jpeg(int fd, int fd_out, uint64_t initial_key) { 
+
+    uint64_t keys[DES_NUM_ROUNDS];
+    uint64_t block;
+
+    size_t file_size = lseek(fd, 0, SEEK_END);
+    printf("File size: %ld\n", file_size);
+
+    int header_size = 0;
+
+    lseek(fd, 0, SEEK_SET);
+    lseek(fd_out, 0, SEEK_SET);
+
+    header_size = jpg_size_header(fd);
+
+    int header_add = 8 - (((file_size - 2) - header_size) % 8);
+    header_size += header_add;
+
+    printf("Header size: %d\n", header_size);
+
+    uint8_t byte = 0;
+
+    for(int i = 0; i < header_size; i++){
+        read(fd, &byte, 1);
+        if(i==0) printf("Byte: %d\n", byte);
+        write(fd_out, &byte, 1);
+    }
+
+    uint64_t data;
+    uint64_t iv_block = DES_IV_BLOCK;
+
+    calculate_subkeys(initial_key, keys);
+
+    while (read(fd, &data, 8) == 8) {
+        if(DES_MODE == 0) iv_block = 0;
+        block = des_cypher(data, iv_block, keys);
+        iv_block = block;
+        write(fd_out, &block, 8);
+        data = 0;
+    }
+
+    uint16_t word = 0xd9ff;
+    write(fd_out, &word, 2);
+    
+    close(fd);
+    close(fd_out);
+
+    return 0;
+}
+
+int descifrar_jpeg(int fd, int fd_out, uint64_t initial_key) {
+
+    uint64_t keys[DES_NUM_ROUNDS];
+    uint64_t block;
+
+    size_t file_size = lseek(fd, 0, SEEK_END);
+    printf("File size: %ld\n", file_size);
+
+    int header_size = 0;
+
+    lseek(fd, 0, SEEK_SET);
+    lseek(fd_out, 0, SEEK_SET);
+
+    header_size = jpg_size_header(fd);
+
+    int header_add = 8 - (((file_size - 2) - header_size) % 8);
+    header_size += header_add;
+
+    printf("Header size: %d\n", header_size);
+
+    uint8_t byte = 0;
+
+    printf("Header size: %d\n", header_size);
+
+    for(int i = 0; i < header_size; i++){
+        read(fd, &byte, 1);
+        write(fd_out, &byte, 1);
+    }
+
+    uint64_t data;
+    uint64_t iv_block = DES_IV_BLOCK;
+
+    calculate_subkeys(initial_key, keys);
+
+    // Reverse the keys
+    uint64_t keys_reverted[16];
+    for (int i = 0; i < 16; i++) {
+        keys_reverted[i] = keys[15-i];
+    }
+
+    while (read(fd, &data, 8) == 8) {
+        if(DES_MODE == 0) iv_block = 0;
+        block = des_decypher(data, iv_block, keys_reverted);
+        iv_block = data;
+        write(fd_out, &block, 8);
+        data = 0;
+    }
+
+    uint16_t word = 0xd9ff;
+    write(fd_out, &word, 2);
+    
     close(fd);
     close(fd_out);
 
@@ -266,6 +421,11 @@ int is_hex(const char *str) {
 
 int jpg_size_header(int fd) {
 
+    // Guardamos la posicion en la que estabamos en fd
+    int fd_pos = lseek(fd, 0, SEEK_CUR);
+
+    lseek(fd, 0, SEEK_SET);
+
     FILE *infile = fdopen(fd, "rb");
 
     struct jpeg_decompress_struct cinfo;
@@ -289,5 +449,9 @@ int jpg_size_header(int fd) {
 
     // Cerrar el archivo
     //fclose(infile);
+
+    // Restaurar la posición original
+    lseek(fd, fd_pos, SEEK_SET);
+
     return header_size;
 }
