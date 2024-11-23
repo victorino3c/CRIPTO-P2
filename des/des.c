@@ -1,78 +1,36 @@
-#include "../utiles/utils.h"
+/**
+ * @file des.c
+ * @author Nicolas Victorino && Ignacio Nunnez
+ * @brief 
+ * @version 0.1
+ * @date 2024-11-22
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
 
-uint64_t des_cypher(uint64_t block, uint64_t key, uint64_t *subkeys);
+#include "des.h"
 
-uint64_t des_decypher(uint64_t block, uint64_t *subkeys);
+/******************************************************************************************/
+/* Public functions of DES */
+/******************************************************************************************/
 
-void calculate_subkeys(uint64_t key, uint64_t *subkeys);
-
-uint64_t encode_block(uint64_t block, uint64_t *subkeys);
-
-uint64_t permute_original_key(uint64_t key);
-
-void split_48block(uint64_t block, uint32_t *left, uint32_t *right);
-
-void split_64block(uint64_t key, uint32_t *left, uint32_t *right);
-
-uint64_t merge_32block(uint32_t left, uint32_t right);
-
-uint32_t rotate_key_round(uint32_t key, int round);
-
-uint64_t merge_and_permute_key(uint32_t left, uint32_t right);
-
-uint64_t ip_permutation(uint64_t text);
-
-uint64_t extend_and_permute_E(uint32_t right);
-
-uint32_t s_box_substitution(uint64_t right_extended);
-
-uint32_t s_box_permutation(uint32_t right_substituted);
-
-uint64_t inverse_ip_permutation(uint64_t block);
-
-int main(int argc, char *argv[])
+/* Des cypher function */
+uint64_t des_cypher(uint64_t block, uint64_t cbc_block, uint64_t *subkeys)
 {
-
-    uint64_t keys[DES_NUM_ROUNDS];
-    uint64_t block;
-
-    block = des_cypher(0xFEDCBA9876543210, 0x0F1571C947D9E859, keys);
-
-    printf("Block cyphered: 0x%lx\n", block);
-
-    for (int i = 0; i < DES_NUM_ROUNDS; i++)
-    {
-        // printf("Subkey %d: 0x%lx\n", i+1, keys[i]);
-    }
-
-    /*Revert order keys*/
-    uint64_t keys2[DES_NUM_ROUNDS];
-    for (int i = 0; i < DES_NUM_ROUNDS; i++)
-    {
-        keys2[i] = keys[DES_NUM_ROUNDS - i - 1];
-        // printf("Subkey2 %d: 0x%lx\n", i+1, keys2[i]);
-    }
-
-    block = des_decypher(block, keys2);
-    printf("Block decyphered: 0x%lx\n", block);
-}
-
-uint64_t des_cypher(uint64_t block, uint64_t key, uint64_t *subkeys)
-{
-
-    // Generate the subkeys (Step 1)
-    calculate_subkeys(key, subkeys);
 
     // Encode the block by the keys (Step 2)
-    return encode_block(block, subkeys);
+    return encode_block(block, cbc_block, subkeys, CYPHER);
 }
 
-uint64_t des_decypher(uint64_t block, uint64_t *subkeys)
+/* Des decypher function */
+uint64_t des_decypher(uint64_t block, uint64_t cbc_block, uint64_t *subkeys)
 {
 
-    return encode_block(block, subkeys);
+    return encode_block(block, cbc_block, subkeys, DECYPHER);
 }
 
+/* Function calculator of the subkeys */
 void calculate_subkeys(uint64_t key, uint64_t *subkeys)
 {
 
@@ -103,8 +61,14 @@ void calculate_subkeys(uint64_t key, uint64_t *subkeys)
     }
 }
 
-uint64_t encode_block(uint64_t block, uint64_t *subkeys)
+/* Function to encode a block */
+uint64_t encode_block(uint64_t block, uint64_t cbc_vector, uint64_t *subkeys, int mode)
 {
+
+    if (mode == CYPHER) {
+        block = block ^ cbc_vector;
+    }
+
     uint64_t block_permuted = ip_permutation(block);
 
     // printf("Block permuted: 0x%lx\n", block_permuted);
@@ -133,15 +97,20 @@ uint64_t encode_block(uint64_t block, uint64_t *subkeys)
     }
 
     uint64_t final_block = merge_32block(right_block, left_block);
-    printf("Final block: 0x%lx\n", final_block);
+    //printf("Final block: 0x%lx\n", final_block);
 
     uint64_t block_cyphered = inverse_ip_permutation(final_block);
 
     // printf("Block cyphered: 0x%lx\n", block_cyphered);
 
+    if (mode == DECYPHER) {
+        block_cyphered = block_cyphered ^ cbc_vector;
+    }
+
     return block_cyphered;
 }
 
+/* Permutes original key following PC1 */
 uint64_t permute_original_key(uint64_t key)
 {
 
@@ -157,6 +126,7 @@ uint64_t permute_original_key(uint64_t key)
     return key_permuted;
 }
 
+/* Split 48 bits block */
 void split_48block(uint64_t block, uint32_t *left, uint32_t *right)
 {
 
@@ -164,6 +134,7 @@ void split_48block(uint64_t block, uint32_t *left, uint32_t *right)
     *right = block & 0x000000000FFFFFFF;
 }
 
+/* Split 64 bits block */
 void split_64block(uint64_t block, uint32_t *left, uint32_t *right)
 {
 
@@ -171,6 +142,7 @@ void split_64block(uint64_t block, uint32_t *left, uint32_t *right)
     *right = block & 0x00000000FFFFFFFF;
 }
 
+/* Merge two 32 bits blocks */
 uint64_t merge_32block(uint32_t left, uint32_t right)
 {
 
@@ -179,6 +151,7 @@ uint64_t merge_32block(uint32_t left, uint32_t right)
     return block;
 }
 
+/* Rotate 32 bits key following round shifts */
 uint32_t rotate_key_round(uint32_t key, int round)
 {
 
@@ -191,6 +164,7 @@ uint32_t rotate_key_round(uint32_t key, int round)
     return new_key;
 }
 
+/* Merge two 28 bits blocks into a 56 bits block and permute it following PC2 */
 uint64_t merge_and_permute_key(uint32_t left, uint32_t right)
 {
 
@@ -212,6 +186,7 @@ uint64_t merge_and_permute_key(uint32_t left, uint32_t right)
     return key_permuted;
 }
 
+/* Permutes block following IP-des */
 uint64_t ip_permutation(uint64_t text)
 {
 
@@ -229,6 +204,7 @@ uint64_t ip_permutation(uint64_t text)
     return text_permuted;
 }
 
+/* Extend and permute a 32 bits block following E-des */
 uint64_t extend_and_permute_E(uint32_t right)
 {
 
@@ -245,6 +221,7 @@ uint64_t extend_and_permute_E(uint32_t right)
     return right_extended;
 }
 
+/* Substitute a 48 bits block following S-boxes */
 uint32_t s_box_substitution(uint64_t right_extended)
 {
 
@@ -280,6 +257,7 @@ uint32_t s_box_substitution(uint64_t right_extended)
     return right_substituted;
 }
 
+/* Permutes a 32 bits block following P-des */
 uint32_t s_box_permutation(uint32_t right_substituted)
 {
 
@@ -297,6 +275,7 @@ uint32_t s_box_permutation(uint32_t right_substituted)
     return right_permuted;
 }
 
+/* Permutes block following IP^-1-des */
 uint64_t inverse_ip_permutation(uint64_t block)
 {
 

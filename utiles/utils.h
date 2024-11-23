@@ -8,10 +8,18 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#define _POSIX_C_SOURCE 200112L
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <ctype.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <jpeglib.h>
 #include <gmp.h>
 #include <time.h>
 #include <math.h>
@@ -209,6 +217,9 @@ static const char INV_MIX_COLUMN_MATRIX[BYTES_PER_WORD][BYTES_PER_WORD][HEX_STRI
 	{ "0D", "09", "0E", "0B" },
 	{ "0B", "0D", "09", "0E" }
 };
+
+#define CYPHER 0
+#define DECYPHER 1
 
 /**
  * @brief Filters the text to get it ready to get encoded. Transforms all the upper case letters to lower case and removes all the other symbols
