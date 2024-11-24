@@ -127,4 +127,4 @@ $(O)utils.o: $(U)utils.c $(U)utils.h
 	$(CC) -o $@ $(FLAGS) $<
 
 clean:
-	rm -f $(O)*.o $(P)seg-perf $(D)des_cypher $(D)triple_des_cypher $(D)des_no_lineal $(AS)aes_no_lineal $(AS)SBOX_AES $(A)afin $(DA)histogram.png $(DA)frequencies.txt
+	rm -f $(O)*.o $(P)seg-perf $(D)des_cypher $(D)triple_des_cypher $(D)des_no_lineal $(D)des_avalancha $(AS)aes_no_lineal $(AS)SBOX_AES $(A)afin $(DA)histogram.png $(DA)frequencies.txt
