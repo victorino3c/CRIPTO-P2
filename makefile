@@ -9,8 +9,9 @@ T=textos/
 B=binarios/
 D=des/
 AS=aes/
+DA=data/
 
-all: $(P)seg-perf $(D)des_cypher $(D)triple_des_cypher $(AS)aes_no_lineal
+all: $(P)seg-perf $(D)des_cypher $(D)triple_des_cypher $(AS)aes_no_lineal $(AS)SBOX_AES 
 
 run_seg-perf_P: $(P)seg-perf
 	$(P)seg-perf -P -i $(T)hamlet.txt -o $(P)salida.txt
@@ -39,8 +40,11 @@ run_triple_des_d: $(D)triple_des_cypher
 run_des_no_lineal: $(D)des_no_lineal
 	$(D)des_no_lineal -g bar -n random -r 1000000
 
-run_aes: $(AS)aes_no_lineal
+run_aes_no_lineal: $(AS)aes_no_lineal
 	$(AS)aes_no_lineal -o
+
+run_SBOX_AES: $(AS)SBOX_AES
+	$(AS)SBOX_AES -C -o $(DA)sbox_aes.txt
 
 # COMANDOS EJECUCION AFIN #
 run_afin_D: $(A)afin
@@ -92,6 +96,12 @@ $(AS)aes_no_lineal: $(O)aes_no_lineal.o $(O)utils.o
 $(O)aes_no_lineal.o: $(AS)aes_no_lineal.c $(U)utils.h
 	$(CC) -o $@ $(FLAGS) $<
 
+$(AS)SBOX_AES: $(O)SBOX_AES.o $(O)utils.o
+	$(CC) -o $@ $^ $(LIBRARY)
+
+$(O)SBOX_AES.o: $(AS)SBOX_AES.c $(U)utils.h
+	$(CC) -o $@ $(FLAGS) $<
+
 $(O)afin.o: $(A)afin.c $(A)afin.h $(U)utils.h
 	$(CC) -o $@ $(FLAGS) $<
 
@@ -99,4 +109,4 @@ $(O)utils.o: $(U)utils.c $(U)utils.h
 	$(CC) -o $@ $(FLAGS) $<
 
 clean:
-	rm -f $(O)*.o $(P)seg-perf $(D)des_cypher $(D)triple_des_cypher $(D)des_no_lineal $(AS)aes_no_lineal $(A)afin $(AS)histogram.png
+	rm -f $(O)*.o $(P)seg-perf $(D)des_cypher $(D)triple_des_cypher $(D)des_no_lineal $(AS)aes_no_lineal $(AS)SBOX_AES $(A)afin $(DA)histogram.png $(DA)frequencies.txt
