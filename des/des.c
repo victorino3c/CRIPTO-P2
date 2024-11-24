@@ -70,25 +70,18 @@ void calculate_subkeys(uint64_t key, uint64_t *subkeys)
     uint32_t left[DES_NUM_ROUNDS], right[DES_NUM_ROUNDS], inital_left, inital_right;
     split_48block(permuted_key, &inital_left, &inital_right);
 
-    // printf("0 -> Left: 0x%x\tRight: 0x%x\n", inital_left, inital_right);
-
     left[0] = rotate_key_round(inital_left, 0);
     right[0] = rotate_key_round(inital_right, 0);
-
-    // printf("1 -> Left: 0x%x\tRight: 0x%x\n", left[0], right[0]);
 
     for (int i = 1; i < DES_NUM_ROUNDS; i++)
     {
         left[i] = rotate_key_round(left[i - 1], i);
         right[i] = rotate_key_round(right[i - 1], i);
-
-        // printf("%d -> Left: 0x%x\tRight: 0x%x\n", i+1, left[i], right[i]);
     }
 
     for (int i = 0; i < DES_NUM_ROUNDS; i++)
     {
         subkeys[i] = merge_and_permute_key(left[i], right[i]);
-        // printf("Subkey %d: 0x%lx\n", i+1, subkeys[i]);
     }
 }
 
@@ -102,38 +95,17 @@ uint64_t encode_block(uint64_t block, uint64_t cbc_vector, uint64_t *subkeys, in
 
     uint64_t block_permuted = ip_permutation(block);
 
-    // printf("Block permuted: 0x%lx\n", block_permuted);
-
     uint32_t left_block, right_block;
     split_64block(block_permuted, &left_block, &right_block);
 
-    // printf("Initial block -> Left: 0x%x\tRight: 0x%x\n", left_block, right_block);
 
-    do_des_rounds(&left_block, &right_block, subkeys);
-    /*for (int i = 0; i < DES_NUM_ROUNDS; i++)
-    {
-        // printf("Right: 0x%x\n", right_block);
-        uint64_t right_extended = extend_and_permute_E(right_block);
-        // printf("Right extended: 0x%lx\n", right_extended);
-        // printf("Subkey: 0x%lx\n", subkeys[i]);
-        right_extended ^= subkeys[i];
-        // printf("Right extended XOR: 0x%lx\n", right_extended);
-        uint32_t right_substituted = s_box_substitution(right_extended);
-        uint32_t right_permuted = s_box_permutation(right_substituted);
-
-        uint32_t temp = right_block;
-        right_block = left_block ^ right_permuted;
-        left_block = temp;
-
-        // printf("Round %d -> Left: 0x%x\tRight: 0x%x\n", i+1, left_block, right_block);
-    }*/
+    for(int i=0; i<DES_NUM_ROUNDS; i++){
+        do_des_round(&left_block, &right_block, subkeys[i]);
+    }
 
     uint64_t final_block = merge_32block(right_block, left_block);
-    //printf("Final block: 0x%lx\n", final_block);
 
     uint64_t block_cyphered = inverse_ip_permutation(final_block);
-
-    // printf("Block cyphered: 0x%lx\n", block_cyphered);
 
     if (mode == DECYPHER) {
         block_cyphered = block_cyphered ^ cbc_vector;
@@ -142,25 +114,18 @@ uint64_t encode_block(uint64_t block, uint64_t cbc_vector, uint64_t *subkeys, in
     return block_cyphered;
 }
 
-void do_des_rounds(uint32_t *left_block, uint32_t *right_block, uint64_t *subkeys)
+void do_des_round(uint32_t *left_block, uint32_t *right_block, uint64_t subkeys)
 {
-    for (int i = 0; i < DES_NUM_ROUNDS; i++)
-    {
-        // printf("Right: 0x%x\n", right_block);
-        uint64_t right_extended = extend_and_permute_E(*right_block);
-        // printf("Right extended: 0x%lx\n", right_extended);
-        // printf("Subkey: 0x%lx\n", subkeys[i]);
-        right_extended ^= subkeys[i];
-        // printf("Right extended XOR: 0x%lx\n", right_extended);
-        uint32_t right_substituted = s_box_substitution(right_extended);
-        uint32_t right_permuted = s_box_permutation(right_substituted);
 
-        uint32_t temp = *right_block;
-        *right_block = *left_block ^ right_permuted;
-        *left_block = temp;
+    uint64_t right_extended = extend_and_permute_E(*right_block);
+    right_extended ^= subkeys;
+    uint32_t right_substituted = s_box_substitution(right_extended);
+    uint32_t right_permuted = s_box_permutation(right_substituted);
 
-        // printf("Round %d -> Left: 0x%x\tRight: 0x%x\n", i+1, left_block, right_block);
-    }
+    uint32_t temp = *right_block;
+    *right_block = *left_block ^ right_permuted;
+    *left_block = temp;
+
 }
 
 /* Permutes original key following PC1 */
@@ -297,10 +262,6 @@ uint32_t s_box_substitution(uint64_t right_extended)
             row++;
         }
 
-        // printf("Row: %d\n", row);
-        // printf("Column: %d\n", column);
-        // printf("S_BOX: %d\n\n", S_BOXES[NUM_S_BOXES-1-i][row][column]);
-
         right_substituted |= S_BOXES[NUM_S_BOXES - 1 - i][row][column];
 
         if (i > 0)
@@ -349,17 +310,16 @@ uint64_t inverse_ip_permutation(uint64_t block)
 /* Checks if a string is an hexadecimal number valid */
 int is_hex(const char *str) {
     if (str == NULL || *str == '\0') {
-        return -1; // Cadena vacía o nula no es válida.
+        return -1;
     }
 
-    // Recorre cada carácter de la cadena.
     for (int i = 0; str[i] != '\0'; i++) {
         char c = str[i];
-        // Verifica si el carácter no está entre 0-9 ni A-F.
+        
         if (!(isdigit(c) || (c >= 'A' && c <= 'F'))) {
             return -1;
         }
     }
 
-    return 0; // Todos los caracteres son válidos.
+    return 0;
 }

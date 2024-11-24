@@ -1,6 +1,6 @@
 CC = gcc 
 FLAGS = -c -Wall -ansi -pedantic -std=c99
-LIBRARY = -lgmp -ljpeg
+LIBRARY = -lgmp -ljpeg -lm
 P=seguridadPerfecta/
 O=obj/
 A=afin/
@@ -17,6 +17,9 @@ run_seg-perf_P: $(P)seg-perf
 
 run_seg-perf_I: $(P)seg-perf
 	$(P)seg-perf -I -i $(T)hamlet.txt -o $(P)salida.txt
+
+run_des_probador: $(D)des_probador
+	$(D)des_probador
 
 run_des_c: $(D)des_cypher
 	$(D)des_cypher -C -k 12345F789AB23456 -i $(B)memoria-p1.pdf -o $(B)cyphered_memoria-p1.pdf
@@ -37,7 +40,10 @@ run_triple_des_d: $(D)triple_des_cypher
 	$(D)triple_des_cypher -D -k 133457799BBCDFF11223345566778899AABBCCDDEEFF0011 -i $(B)cyphered_memoria-p1.pdf -o $(B)decyphered_memoria-p1.pdf
 
 run_des_no_lineal: $(D)des_no_lineal
-	$(D)des_no_lineal -g bar -n random -r 1000000
+	$(D)des_no_lineal -g normal -n random -r 1000000
+
+run_des_avalancha: $(D)des_avalancha
+	$(D)des_avalancha -b random -k random -n 1000 -m key
 
 run_aes: $(AS)aes_no_lineal
 	$(AS)aes_no_lineal -o
@@ -59,6 +65,12 @@ $(P)seg-perf: $(O)seg-perf.o $(O)afin.o $(O)utils.o
 $(O)seg-perf.o: $(P)seg-perf.c $(A)afin.h $(U)utils.h
 	$(CC) -o $@ $(FLAGS) $<
 
+$(D)des_probador: $(O)des_probador.o $(O)des.o $(O)utils.o
+	$(CC) -o $@ $^ $(LIBRARY)
+
+$(O)des_probador.o: $(D)des_probador.c $(D)des.h $(U)utils.h
+	$(CC) -o $@ $(FLAGS) $<
+
 $(D)des_cypher: $(O)des_cypher.o $(O)des.o $(O)utils.o
 	$(CC) -o $@ $^ $(LIBRARY)
 
@@ -77,6 +89,12 @@ $(D)des_no_lineal: $(O)des_no_lineal.o $(O)des.o $(O)utils.o
 $(O)des_no_lineal.o: $(D)des_no_lineal.c $(D)des.h $(U)utils.h
 	$(CC) -o $@ $(FLAGS) $<
 
+$(D)des_avalancha: $(O)des_avalancha.o $(O)des.o $(O)utils.o
+	$(CC) -o $@ $^ $(LIBRARY)
+
+$(O)des_avalancha.o: $(D)des_avalancha.c $(D)des.h $(U)utils.h
+	$(CC) -o $@ $(FLAGS) $<
+
 $(A)afin: $(O)afin.o
 	$(CC) -o $@ $^ $(LIBRARY)
 
@@ -91,7 +109,7 @@ $(AS)aes_no_lineal: $(O)aes_no_lineal.o $(O)utils.o
 
 $(O)aes_no_lineal.o: $(AS)aes_no_lineal.c $(U)utils.h
 	$(CC) -o $@ $(FLAGS) $<
-
+	
 $(O)afin.o: $(A)afin.c $(A)afin.h $(U)utils.h
 	$(CC) -o $@ $(FLAGS) $<
 
@@ -99,4 +117,4 @@ $(O)utils.o: $(U)utils.c $(U)utils.h
 	$(CC) -o $@ $(FLAGS) $<
 
 clean:
-	rm -f $(O)*.o $(P)seg-perf $(D)des_cypher $(D)triple_des_cypher $(D)des_no_lineal $(AS)aes_no_lineal $(A)afin $(AS)histogram.png
+	rm -f $(O)*.o $(P)seg-perf $(D)des_probador $(D)des_cypher $(D)triple_des_cypher $(D)des_no_lineal $(D)des_avalancha $(AS)aes_no_lineal $(A)afin $(AS)histogram.png 

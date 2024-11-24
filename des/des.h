@@ -79,14 +79,14 @@ void calculate_subkeys(uint64_t key, uint64_t *subkeys);
 uint64_t encode_block(uint64_t block, uint64_t cbc_vector, uint64_t *subkeys, int mode);
 
 /**
- * @brief Do the DES rounds
+ * @brief Do a DES round
  * 
  * @param left_block left_block for the round (return the result of the final round)
  * @param right_block right_block for the round (return the result of the final round)
- * @param subkeys subkeys for the round
+ * @param subkeys subkey for the round
  * 
  */
-void do_des_rounds(uint32_t *left_block, uint32_t *right_block, uint64_t *subkeys);
+void do_des_round(uint32_t *left_block, uint32_t *right_block, uint64_t subkeys);
 
 /**
  * @brief Permutes the original key following PC1-des-table

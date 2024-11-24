@@ -428,3 +428,36 @@ void generate_histogram_with_gnuplot(const char *script_filename) {
     snprintf(command, sizeof(command), "gnuplot %s", script_filename);
     system(command);
 }
+
+/* Function to generate a random 64 bits number */
+uint64_t rand64() {
+    uint64_t r = 0;
+    for (int i = 0; i < 64; i++) {
+        r |= (rand() % 2);
+        r <<= 1;
+    }
+    r >>= 1;
+    return r;
+}
+
+int bit_comparator_counter(uint32_t num1, uint32_t num2, int size) {
+    
+    int counter = 0;
+
+    for (int j = 0; j < size; j++) {
+        if ( ((num1 >> j) % 2) == ((num2 >> j) % 2) ) {
+            counter++;
+        }
+    }
+
+    return counter;
+}
+
+void bit_comparator_position(uint32_t num1, uint32_t num2, int *frequencies, int size) {
+
+    for (int j = 0; j < size; j++) {
+        if ( ((num1 >> j) % 2) == ((num2 >> j) % 2) ) {
+            frequencies[j]++;
+        }
+    }
+}
