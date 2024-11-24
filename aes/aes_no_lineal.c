@@ -9,8 +9,8 @@
 
 #define ELEM_SIZE_BYTE 16 // size in bytes of the 128 bits elem
 
-#define OUTPUT_FILE "aes/frequencies.txt"
-#define GP_FILE "aes/plotHistogram.gp"
+#define OUTPUT_FILE "data/frequencies.txt"
+#define GP_FILE "data/plotHistogram.gp"
 #define DEFAULT_OUTPUT_MODE "o"
 
 /**

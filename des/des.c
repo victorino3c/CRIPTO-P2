@@ -109,7 +109,8 @@ uint64_t encode_block(uint64_t block, uint64_t cbc_vector, uint64_t *subkeys, in
 
     // printf("Initial block -> Left: 0x%x\tRight: 0x%x\n", left_block, right_block);
 
-    for (int i = 0; i < DES_NUM_ROUNDS; i++)
+    do_des_rounds(&left_block, &right_block, subkeys);
+    /*for (int i = 0; i < DES_NUM_ROUNDS; i++)
     {
         // printf("Right: 0x%x\n", right_block);
         uint64_t right_extended = extend_and_permute_E(right_block);
@@ -125,7 +126,7 @@ uint64_t encode_block(uint64_t block, uint64_t cbc_vector, uint64_t *subkeys, in
         left_block = temp;
 
         // printf("Round %d -> Left: 0x%x\tRight: 0x%x\n", i+1, left_block, right_block);
-    }
+    }*/
 
     uint64_t final_block = merge_32block(right_block, left_block);
     //printf("Final block: 0x%lx\n", final_block);
@@ -139,6 +140,27 @@ uint64_t encode_block(uint64_t block, uint64_t cbc_vector, uint64_t *subkeys, in
     }
 
     return block_cyphered;
+}
+
+void do_des_rounds(uint32_t *left_block, uint32_t *right_block, uint64_t *subkeys)
+{
+    for (int i = 0; i < DES_NUM_ROUNDS; i++)
+    {
+        // printf("Right: 0x%x\n", right_block);
+        uint64_t right_extended = extend_and_permute_E(*right_block);
+        // printf("Right extended: 0x%lx\n", right_extended);
+        // printf("Subkey: 0x%lx\n", subkeys[i]);
+        right_extended ^= subkeys[i];
+        // printf("Right extended XOR: 0x%lx\n", right_extended);
+        uint32_t right_substituted = s_box_substitution(right_extended);
+        uint32_t right_permuted = s_box_permutation(right_substituted);
+
+        uint32_t temp = *right_block;
+        *right_block = *left_block ^ right_permuted;
+        *left_block = temp;
+
+        // printf("Round %d -> Left: 0x%x\tRight: 0x%x\n", i+1, left_block, right_block);
+    }
 }
 
 /* Permutes original key following PC1 */
