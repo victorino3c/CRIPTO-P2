@@ -17,8 +17,6 @@
 /* File where to write the gnuplot script */
 #define GP_FILE "data/plotLineGraph.gp"
 
-#define NUMBER_OF_TESTS 100000
-
 /**
  * @brief Struct to store the mode of the program.
  *        Block mode will change one bit of the block
@@ -56,14 +54,17 @@ int main(int argc, char *argv[]) {
     srand(time(NULL));
     
     uint64_t keys[16], keys2[16];
-    uint64_t block;
-    uint64_t initial_key;
+    uint64_t block=0;
+    uint64_t initial_key=0;
     uint32_t left1 = 0, right1 = 0, left2 = 0, right2 = 0;
     double counter[DES_NUM_ROUNDS];
-    int number_of_tests = NUMBER_OF_TESTS;
+    int number_of_tests = 0;
     mode mode;
 
     check_args(argc, argv, &block, &initial_key, &number_of_tests, &mode);
+    
+    printf("Initial block: %016lx\n", block);
+    printf("Initial key: %016lx\n", initial_key);
 
     FILE *data_file = fopen(DATA_FILE, "w");
     if (data_file == NULL) {
@@ -145,8 +146,9 @@ void check_args(int argc, char *argv[], uint64_t *block, uint64_t *initial_key, 
             printf("Block is not a hexadecimal number\n");
             exit(1);
         }
- 
-        *block = strtoull(argv[2], NULL, 16);
+        else{
+            *block = strtoull(argv[2], NULL, 16);
+        }
     }
     else{
         printf("Mode not recognized\n");
@@ -162,8 +164,9 @@ void check_args(int argc, char *argv[], uint64_t *block, uint64_t *initial_key, 
             printf("Key is not a hexadecimal number\n");
             exit(1);
         }
- 
-        *initial_key = strtoull(argv[4], NULL, 16);
+        else{
+            *initial_key = strtoull(argv[4], NULL, 16);
+        }
     }
     else{
         printf("Mode not recognized\n");

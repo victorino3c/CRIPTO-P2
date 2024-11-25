@@ -108,6 +108,8 @@ int main(int argc, char *argv[])
         exit(-1);
     }
 
+    printf("Initial key %lx\n", initial_key);
+
     int fd = open(input_file, O_RDONLY);
     if (fd < 0) {
         printf("Error opening file\n");
