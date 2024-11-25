@@ -1,9 +1,9 @@
 from Crypto.Cipher import DES
 
 # Definir texto plano y clave
-plaintext = bytes.fromhex("0123456789ABCDEF")
-iv = bytes.fromhex("0000000000000000")
-key = bytes.fromhex("133457799BBCDFFD")
+plaintext = bytes.fromhex("c2bd324f9e0a7706")
+iv = bytes.fromhex("0232f2f10b980837")
+key = bytes.fromhex("d543d6ea8c64d3b9")
 
 # Crear un objeto DES en modo ECB
 cipher1 = DES.new(key, DES.MODE_CBC, iv)

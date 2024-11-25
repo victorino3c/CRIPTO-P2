@@ -361,4 +361,15 @@ void print_histogram(int *frequencies);
  */
 void generate_histogram_with_gnuplot(const char *script_filename);
 
+/**
+ * @brief Generate a random 64 bits number
+ * 
+ * @return uint64_t random number
+ */
+uint64_t rand64();
+
+int bit_comparator_counter(uint32_t num1, uint32_t num2, int size);
+
+void bit_comparator_position(uint32_t num1, uint32_t num2, int *frequencies, int size);
+
 #endif

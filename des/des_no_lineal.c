@@ -21,6 +21,8 @@
 #define BLOCK_NUM 8
 #define BLOCK_SIZE 6
 
+#define NUM_ROUNDS 16
+
 /* Mode of the graphic result*/
 typedef enum {
     NORMAL,
@@ -57,20 +59,12 @@ uint64_t change_one_bit_per_block(uint64_t key, int block_size);
  */
 int check_args(int argc, char *argv[], mode_gr* mode_gr, mode_num* mode_num, int* rep);
 
-/**
- * @brief Generate a random 64 bits number
- * 
- * @return uint64_t random number
- */
-uint64_t rand64();
-
 int main(int argc, char *argv[]) {
     int num_attempts = NUMBER_OF_TESTS;
 
     uint64_t key;
     uint32_t result1, result2;
     int frequencies[SIZE];
-    int counter;
     
     mode_gr mode_gr;
     mode_num mode_num;
@@ -92,7 +86,6 @@ int main(int argc, char *argv[]) {
     srand(time(NULL));
 
     for (int i = 0; i < num_attempts; i++) {
-        //printf("Attempt %d\n", i);
 
         key = rand64();
         result1 = s_box_substitution(key);
@@ -110,20 +103,10 @@ int main(int argc, char *argv[]) {
         result2 = s_box_substitution(key);
 
         if(mode_gr == BAR){
-            for (int j = 0; j < SIZE; j++) {
-                if ( ((result1 >> j) % 2) == ((result2 >> j) % 2) ) {
-                    frequencies[j]++;
-                }
-            }
+            bit_comparator_position(result1, result2, frequencies, SIZE);
         }
         else{
-            counter = 0;
-            for (int j = 0; j < SIZE; j++) {
-                if ( ((result1 >> j) % 2) == ((result2 >> j) % 2) ) {
-                    counter++;
-                }
-            }
-            frequencies[counter]++;
+            frequencies[bit_comparator_counter(result1, result2, SIZE)]++;
         }
 
     }
@@ -202,17 +185,6 @@ int check_args(int argc, char *argv[], mode_gr* mode_gr, mode_num* mode_num, int
     }
 
     return 0;
-}
-
-/* Function to generate a random 64 bits number */
-uint64_t rand64() {
-    uint64_t r = 0;
-    for (int i = 0; i < 64; i++) {
-        r |= (rand() % 2);
-        r <<= 1;
-    }
-    r >>= 1;
-    return r;
 }
 
 /* Function to change blocks per bit */

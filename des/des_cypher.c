@@ -152,7 +152,6 @@ int cifrar(int fd, int fd_out, uint64_t initial_key, type_b type) {
     uint64_t block;
 
     size_t file_size = lseek(fd, 0, SEEK_END);
-    printf("File size: %ld\n", file_size);
 
     lseek(fd, 0, SEEK_SET);
     lseek(fd_out, 0, SEEK_SET);
@@ -176,8 +175,6 @@ int cifrar(int fd, int fd_out, uint64_t initial_key, type_b type) {
     write(fd_out, &block, 8);
 
     write(fd_out, &filling_bytes, 1);
-
-    printf("filling bytes: %d\n", filling_bytes);
     
     close(fd);
     close(fd_out);
@@ -200,8 +197,6 @@ int descifrar(int fd, int fd_out, uint64_t initial_key, type_b type) {
     lseek(fd, -1 -tt, SEEK_END);
     read(fd, &filling_bytes, 1);
 
-    printf("Filling bytes: %d\n", filling_bytes);
-
     // Remove last byte with the filling
     ftruncate(fd, lseek(fd, 0, SEEK_END) - 1);
 
@@ -220,8 +215,6 @@ int descifrar(int fd, int fd_out, uint64_t initial_key, type_b type) {
         write(fd_out, &block, 8);
     }
 
-    printf("%d Last block: %lx\n", filling_bytes, block);
-
     // Remove filling
     if (filling_bytes != 0) {
         ftruncate(fd_out, lseek(fd_out, 0, SEEK_END) - (8 - filling_bytes));
@@ -239,7 +232,6 @@ int cifrar_jpeg(int fd, int fd_out, uint64_t initial_key) {
     uint64_t block;
 
     size_t file_size = lseek(fd, 0, SEEK_END);
-    printf("File size: %ld\n", file_size);
 
     int header_size = 0;
 
@@ -251,13 +243,10 @@ int cifrar_jpeg(int fd, int fd_out, uint64_t initial_key) {
     int header_add = 8 - (((file_size - 2) - header_size) % 8);
     header_size += header_add;
 
-    printf("Header size: %d\n", header_size);
-
     uint8_t byte = 0;
 
     for(int i = 0; i < header_size; i++){
         read(fd, &byte, 1);
-        if(i==0) printf("Byte: %d\n", byte);
         write(fd_out, &byte, 1);
     }
 
@@ -289,7 +278,6 @@ int descifrar_jpeg(int fd, int fd_out, uint64_t initial_key) {
     uint64_t block;
 
     size_t file_size = lseek(fd, 0, SEEK_END);
-    printf("File size: %ld\n", file_size);
 
     int header_size = 0;
 
@@ -301,11 +289,7 @@ int descifrar_jpeg(int fd, int fd_out, uint64_t initial_key) {
     int header_add = 8 - (((file_size - 2) - header_size) % 8);
     header_size += header_add;
 
-    printf("Header size: %d\n", header_size);
-
     uint8_t byte = 0;
-
-    printf("Header size: %d\n", header_size);
 
     for(int i = 0; i < header_size; i++){
         read(fd, &byte, 1);
@@ -418,7 +402,6 @@ int jpg_size_header(int fd) {
 
     // Guardar la cabecera en un archivo separado
     header_size = ftell(infile);  // Tamaño hasta el encabezado
-    printf("Header size: %ld\n", header_size);
 
     // Restaurar la posición original
     lseek(fd, fd_pos, SEEK_SET);

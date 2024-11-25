@@ -1,7 +1,7 @@
 set terminal png size 1500,900
 set output 'data/histogram.png'
-set title 'Histogram of Different Bits with 1024 tests'
-set xlabel 'Number of Different Bits'
+set title 'Histogram of the number of variations for an increment on each s-keys'
+set xlabel 'Frequency of change for bit'
 set ylabel 'Frequency'
 set style data histograms
 set style fill solid 1.0 border -1
