@@ -50,7 +50,7 @@ run_aes_no_lineal: $(AS)aes_no_lineal
 	$(AS)aes_no_lineal -o
 
 run_SBOX_AES: $(AS)SBOX_AES
-	$(AS)SBOX_AES -D
+	$(AS)SBOX_AES -C -o $(DA)sbox_aes.txt
 
 # COMANDOS EJECUCION AFIN #
 run_afin_D: $(A)afin
