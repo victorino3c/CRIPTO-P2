@@ -11,6 +11,9 @@ D=des/
 AS=aes/
 DA=data/
 
+###############################################################################
+#COMANDOS                                                                     #
+###############################################################################
 all: $(P)seg-perf $(D)des_cypher $(D)triple_des_cypher $(D)des_no_lineal $(D)des_avalancha $(AS)aes_no_lineal $(AS)SBOX_AES 
 
 run_seg-perf_P: $(P)seg-perf

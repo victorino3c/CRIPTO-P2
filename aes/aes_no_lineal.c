@@ -1,3 +1,13 @@
+/**
+ * @file aes_no_lineal.c
+ * @author Nicolas Victorino && Ignacio Nunnez
+ * @brief 
+ * @version 0.1
+ * @date 2024-11-24
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
 
 #include "../utiles/utils.h"
 
@@ -133,7 +143,7 @@ int main(int argc, char *argv[]) {
     base_exit = sboxesrounds(base_entry);
 
     for (int i = 0; i < NUMBER_OF_TESTS; i++) {
-        entry = random_change_128(entry);
+        entry = one_bit_change_128(entry);
         exit = sboxesrounds(entry);
         different_bits[i] = get_128elem_difference_number(base_exit, exit);
     }
@@ -150,6 +160,35 @@ int main(int argc, char *argv[]) {
             generate_histogram_with_gnuplot(GP_FILE);
         }
     }
+
+    /*Now check that if we convert sbox(A xor B) != sbox(A) xor sbox(B)*/
+    int count = 0;
+    __int128_t a, b, c;
+    __int128_t sbox_a, sbox_b, sbox_c, sbox_a_xor_b;
+
+    for(int i = 0; i < NUMBER_OF_TESTS; i++) {
+        a = random_change_128(base_entry);
+        b = random_change_128(base_entry);
+        c = a ^ b;
+
+        /*If a == b we repeat the iteration*/
+        if (a == b) {
+            i--;
+            continue;
+        }
+
+        sbox_a = direct_box_transformation(from128to8(a));
+        sbox_b = direct_box_transformation(from128to8(b));
+        sbox_c = direct_box_transformation(from128to8(c));
+
+        sbox_a_xor_b = sbox_a ^ sbox_b;
+
+        if (sbox_a_xor_b != sbox_c) {
+            count++;
+        }
+    }
+
+    printf("sbox(A xor B) has been different of sbox(A) xor sbox(B) %d out of %d times (%ld%%)\n", count, NUMBER_OF_TESTS, (long)count * 100 / NUMBER_OF_TESTS);
 
     return 0;
 
